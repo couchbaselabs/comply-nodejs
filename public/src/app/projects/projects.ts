@@ -5,6 +5,7 @@ export interface IProject {
     id?: string,
     name: string,
     description: string,
+    owner: string
 }
 
 @Component({
@@ -24,47 +25,31 @@ export class ProjectsPage {
 
     constructor(http: Http) {
         this.http = http;
-        this.projects = [
-            {
-                id: "1234",
-                name: "test project 1",
-                "owner": "nraboy",
-                "createdat": 1,
-                tasks: 1,
-                users: 5,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            },
-            {
-                id: "52342",
-                name: "test project 2",
-                "owner": "nraboy",
-                "createdat": 1,
-                tasks: 1,
-                users: 5,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            },
-            {
-                id: "8789",
-                name: "test project 3",
-                "owner": "nraboy",
-                "createdat": 1,
-                tasks: 1,
-                users: 5,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        this.getUsers();
+        this.getProjects();
+    }
+
+    getUsers() {
+        this.owners = [];
+        this.http.get("/api/user/getAll")
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            for(var i = 0; i < jsonResponse.length; i++) {
+                this.owners.push(
+                    {
+                        id: jsonResponse[i]._id,
+                        firstname: jsonResponse[i].name.first,
+                        lastname: jsonResponse[i].name.last
+                    }
+                );
             }
-        ];
-        this.owners = [
-            {
-                id: "1234",
-                firstname: "Nic",
-                lastname: "Raboy"
-            },
-            {
-                id: "1234",
-                firstname: "Todd",
-                lastname: "Greenstein"
-            }
-        ]
+        }, (error) => {
+            console.error(JSON.stringify(error));
+        });
+    }
+
+    getProjects() {
+        this.projects = [];
         this.http.get("/api/project/getAll")
         .subscribe((success) => {
             var jsonResponse = success.json();
@@ -85,7 +70,8 @@ export class ProjectsPage {
     create(name: string, description: string, owner: string) {
         var postBody: IProject = {
             name: name,
-            description: description
+            description: description,
+            owner: owner
         }
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");

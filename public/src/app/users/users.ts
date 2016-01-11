@@ -3,8 +3,8 @@ import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/ht
 
 export interface IPerson {
     id?: string,
-    firstName: string,
-    lastName: string,
+    firstname: string,
+    lastname: string,
     street: string,
     city: string,
     state: string,
@@ -40,8 +40,8 @@ export class UsersPage {
                 this.people.push(
                     {
                         id: jsonResponse[i]._id,
-                        firstName: jsonResponse[i].name.first,
-                        lastName: jsonResponse[i].name.last,
+                        firstname: jsonResponse[i].name.first,
+                        lastname: jsonResponse[i].name.last,
                         company: jsonResponse[i].company
                     }
                 );
@@ -68,8 +68,8 @@ export class UsersPage {
 
     create(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
         var postBody: IPerson = {
-            firstName: firstname,
-            lastName: lastname,
+            firstname: firstname,
+            lastname: lastname,
             street: street,
             city: city,
             state: state,

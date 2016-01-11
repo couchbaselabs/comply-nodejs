@@ -15,15 +15,7 @@ var TaskPage = (function () {
     function TaskPage(routeParams, http) {
         var _this = this;
         this.http = http;
-        this.project = {
-            id: "1234",
-            name: "test",
-            description: "some description here",
-            "owner": "nraboy",
-            "createdat": 1,
-            tasks: 1,
-            users: 5
-        };
+        this.getProject(routeParams.get("projectId"));
         this.task = {
             id: "1234",
             name: "Test Task",
@@ -36,7 +28,7 @@ var TaskPage = (function () {
             }
         ];
         this.activity = [];
-        this.http.get("/api/project/get/" + routeParams.get("id"))
+        this.http.get("/api/project/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
             console.log(JSON.stringify(jsonResponse));
@@ -51,6 +43,21 @@ var TaskPage = (function () {
             console.error(JSON.stringify(error));
         });
     }
+    TaskPage.prototype.getProject = function (projectId) {
+        var _this = this;
+        this.project = {};
+        this.http.get("/api/project/get/" + projectId)
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            _this.project = {
+                id: jsonResponse._id,
+                name: jsonResponse.name,
+                description: jsonResponse.description
+            };
+        }, function (error) {
+            console.error(JSON.stringify(error));
+        });
+    };
     TaskPage.prototype.reply = function (comment) {
         if (comment && comment != "") {
             this.activity.unshift({

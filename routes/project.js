@@ -1,4 +1,5 @@
 var ProjectModel = require("../models/project");
+var UserModel = require("../models/user");
 
 var appRouter = function(app) {
 
@@ -28,11 +29,11 @@ var appRouter = function(app) {
         var project = new ProjectModel({
             name: req.body.name,
             description: req.body.description,
-            owner: user.ref(req.body.owner),
-            users: [user.ref(req.body.owner)],
+            owner: UserModel.ref(req.body.owner),
+            users: [UserModel.ref(req.body.owner)],
             status: "active"
         });
-        company.save(function(error, result) {
+        project.save(function(error, result) {
             if(error) {
                 return res.status(400).send(error);
             }

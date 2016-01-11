@@ -19,7 +19,7 @@ var UserMdl = ottoman.model("User", {
     email: "string",
     password: "string",
     company: {ref: "Company"},
-    active: {type: "boolean", default:true}
+    active: {type: "boolean", default: true}
 }, {
     index: {
         findByEmail: {

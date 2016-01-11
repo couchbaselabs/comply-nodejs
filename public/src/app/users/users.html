@@ -12,8 +12,8 @@
         </thead>
         <tbody>
             <tr *ngFor="#person of people">
-                <td><a href="{{person.id}}">{{person.firstName}}</a></td>
-                <td>{{person.lastName}}</td>
+                <td><a href="{{person.id}}">{{person.firstname}}</a></td>
+                <td>{{person.lastname}}</td>
                 <td data-toggle="modal" data-target="#companyModal">{{person.company.$ref}}</td>
             </tr>
         </tbody>

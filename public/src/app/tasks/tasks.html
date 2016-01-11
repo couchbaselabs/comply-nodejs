@@ -15,10 +15,7 @@
                     </div>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="/#/task/1234">Task 1</a></li>
-                    <li class="list-group-item">Task 2</li>
-                    <li class="list-group-item">Task 3</li>
-                    <li class="list-group-item">Task 4</li>
+                    <li class="list-group-item" *ngFor="#task of tasks"><a href="/#/task/{{project.id}}/{{task.id}}">{{task.name}}</a></li>
                 </ul>
             </div>
         </div>

@@ -22,16 +22,7 @@ export class TaskPage {
 
     constructor(routeParams: RouteParams, http: Http) {
         this.http = http;
-        this.project = {
-            id: "1234",
-            name: "test",
-            description: "some description here",
-            "owner": "nraboy",
-            "createdat": 1,
-            tasks: 1,
-            users: 5
-        }
-
+        this.getProject(routeParams.get("projectId"));
         this.task = {
             id: "1234",
             name: "Test Task",
@@ -47,7 +38,7 @@ export class TaskPage {
 
         this.activity = [];
 
-        this.http.get("/api/project/get/" + routeParams.get("id"))
+        this.http.get("/api/project/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
             console.log(JSON.stringify(jsonResponse));
@@ -57,6 +48,21 @@ export class TaskPage {
                     name: jsonResponse[i].name,
                     description: jsonResponse[i].description
                 }
+            }
+        }, (error) => {
+            console.error(JSON.stringify(error));
+        });
+    }
+
+    getProject(projectId: string) {
+        this.project = {};
+        this.http.get("/api/project/get/" + projectId)
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            this.project = {
+                id: jsonResponse._id,
+                name: jsonResponse.name,
+                description: jsonResponse.description
             }
         }, (error) => {
             console.error(JSON.stringify(error));

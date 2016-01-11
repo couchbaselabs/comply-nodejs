@@ -17,11 +17,11 @@ import {
     LocationStrategy,
     HashLocationStrategy,
     Router
-} from 'angular2/router';
+} from "angular2/router";
 
-import { CompaniesPage } from './companies/companies';
-import { ProjectsPage } from './projects/projects';
-import { TaskPage } from './task/task';
+import { CompaniesPage } from "./companies/companies";
+import { ProjectsPage } from "./projects/projects";
+import { TaskPage } from "./task/task";
 import { UsersPage } from "./users/users";
 import { TasksPage } from "./tasks/tasks";
 
@@ -34,7 +34,7 @@ import { TasksPage } from "./tasks/tasks";
 @RouteConfig([
     { path: "/", as: "Companies", component: CompaniesPage },
     { path: "/projects", as: "Projects", component: ProjectsPage },
-    { path: "/task/:id", as: "Task", component: TaskPage },
+    { path: "/task/:projectId/:taskId", as: "Task", component: TaskPage },
     { path: "/users", as: "Users", component: UsersPage },
     { path: "/tasks/:projectId", as: "Tasks", component: TasksPage }
 ])

@@ -10,10 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("angular2/core");
 var browser_1 = require("angular2/platform/browser");
-var router_1 = require('angular2/router');
-var companies_1 = require('./companies/companies');
-var projects_1 = require('./projects/projects');
-var task_1 = require('./task/task');
+var router_1 = require("angular2/router");
+var companies_1 = require("./companies/companies");
+var projects_1 = require("./projects/projects");
+var task_1 = require("./task/task");
 var users_1 = require("./users/users");
 var tasks_1 = require("./tasks/tasks");
 var App = (function () {
@@ -30,7 +30,7 @@ var App = (function () {
         router_1.RouteConfig([
             { path: "/", as: "Companies", component: companies_1.CompaniesPage },
             { path: "/projects", as: "Projects", component: projects_1.ProjectsPage },
-            { path: "/task/:id", as: "Task", component: task_1.TaskPage },
+            { path: "/task/:projectId/:taskId", as: "Task", component: task_1.TaskPage },
             { path: "/users", as: "Users", component: users_1.UsersPage },
             { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage }
         ]), 

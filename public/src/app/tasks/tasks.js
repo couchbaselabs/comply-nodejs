@@ -14,11 +14,7 @@ var router_1 = require("angular2/router");
 var TasksPage = (function () {
     function TasksPage(http, routeParams) {
         this.http = http;
-        this.project = {
-            id: "1234",
-            name: "Project 1",
-            description: "Description 1"
-        };
+        this.getProject(routeParams.get("projectId"));
         this.tasks = [
             {
                 id: "1234",
@@ -47,6 +43,21 @@ var TasksPage = (function () {
             console.error(JSON.stringify(error));
         });*/
     }
+    TasksPage.prototype.getProject = function (projectId) {
+        var _this = this;
+        this.project = {};
+        this.http.get("/api/task/getAll/" + projectId)
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            _this.project = {
+                id: jsonResponse._id,
+                name: jsonResponse.name,
+                description: jsonResponse.description
+            };
+        }, function (error) {
+            console.error(JSON.stringify(error));
+        });
+    };
     TasksPage.prototype.create = function (name, description) {
         var _this = this;
         var postBody = {

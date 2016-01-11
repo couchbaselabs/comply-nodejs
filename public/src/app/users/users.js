@@ -21,8 +21,8 @@ var UsersPage = (function () {
             for (var i = 0; i < jsonResponse.length; i++) {
                 _this.people.push({
                     id: jsonResponse[i]._id,
-                    firstName: jsonResponse[i].name.first,
-                    lastName: jsonResponse[i].name.last,
+                    firstname: jsonResponse[i].name.first,
+                    lastname: jsonResponse[i].name.last,
                     company: jsonResponse[i].company
                 });
             }
@@ -46,8 +46,8 @@ var UsersPage = (function () {
     UsersPage.prototype.create = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
         var _this = this;
         var postBody = {
-            firstName: firstname,
-            lastName: lastname,
+            firstname: firstname,
+            lastname: lastname,
             street: street,
             city: city,
             state: state,
