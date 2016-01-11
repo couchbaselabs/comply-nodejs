@@ -1,0 +1,88 @@
+<div class="main">
+    <h1 class="page-header">{{project.name}}</h1>
+    <div class="well">
+        <p>
+            {{project.description}}
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Tasks</strong>
+                    <div class="pull-right">
+                        <a href="" data-toggle="modal" data-target="#newTaskModal"><span class="glyphicon glyphicon-plus"></span></a>
+                    </div>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="/#/task/1234">Task 1</a></li>
+                    <li class="list-group-item">Task 2</li>
+                    <li class="list-group-item">Task 3</li>
+                    <li class="list-group-item">Task 4</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Users</strong>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="#user of users">{{user.firstname}} {{user.lastname}}</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Add username...">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="button" (click)="addUser()">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newTaskModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create New Task</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" [(ngModel)]="name" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" [(ngModel)]="description" placeholder="Description">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Owner</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" [(ngModel)]="owner">
+                                <option value="" disabled selected>Select...</option>
+                                <option *ngFor="#owner of owners" value="{{owner.id}}">{{owner.firstname}} {{owner.lastname}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="create(name, description, owner)">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

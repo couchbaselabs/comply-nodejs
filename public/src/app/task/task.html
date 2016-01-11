@@ -1,0 +1,67 @@
+<div class="main">
+    <h1 class="page-header"><a href="/#/tasks/{{project.id}}">{{project.name}}</a> / <small>{{task.name}}</small></h1>
+    <div class="well">
+        <p>
+            {{task.description}}
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Task History</strong>
+                    <div class="pull-right">
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea [(ngModel)]="comment" style="width: 100%; height: 100px"></textarea>
+                                <br /><br />
+                                <div class="pull-right">
+                                    <button class="btn btn-primary" (click)="reply(comment)">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well" *ngFor="#item of activity">
+                        <p class="small"><strong>{{item.name}} - December 22, 2015</strong></p>
+                        <p>{{item.content}}</p>
+                    </div>
+                    <div class="well">
+                        <p class="small"><strong>Nic Raboy - December 22, 2015</strong></p>
+                        <p>some text here</p>
+                    </div>
+                    <div class="well">
+                        <p class="small"><strong>Todd Greenstein - December 22, 2015</strong></p>
+                        <p>Something else</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Users</strong>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="#user of users">{{user.firstname}} {{user.lastname}}</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Add username...">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="button" (click)="addUser()">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

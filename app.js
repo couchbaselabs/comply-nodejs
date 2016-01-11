@@ -1,24 +1,31 @@
-var express = require('express');
+var express = require("express");
+var bodyParser = require("body-parser");
+var couchbase = require("couchbase");
+var path = require("path");
+var config = require("./config");
 var app = express();
-var path = require('path');
 
-app.use(express.static(path.join(__dirname, 'public')));
-require('./routes/routes')(app);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(3000);
+// Global declaration of the Couchbase server and bucket to be used
+module.exports.bucket = (new couchbase.Cluster(config.couchbase.server)).openBucket(config.couchbase.bucket);
 
+app.use(express.static(path.join(__dirname, "public/src")));
+app.use("/node_modules", express.static(__dirname + "/node_modules/"));
 
-/*
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
- ## =======================
- ## Create a Company
- ## =======================
- curl -X POST http://127.0.0.1:3000/api/company/create -H "Content-Type: application/json" -d '{"name":"innotech","street":"4 Yawkey Way","city":"Boston","state":"MA","zip":"02215","phone":"(503) 227 5501", "website":"www.innotech.com"}' | python -mjson.tool
+// All endpoints to be used in this application
+var company = require("./routes/company.js")(app);
+var user = require("./routes/user.js")(app);
+var project = require("./routes/project.js")(app);
+var task = require("./routes/task.js")(app);
 
- ## =======================
- ## Find a Company
- ## =======================
- curl -X GET http://127.0.0.1:3000/api/company/findOne/innotech | python -mjson.tool
-
-
- */
+var server = app.listen(3000, function () {
+    console.log("Listening on port %s...", server.address().port);
+});

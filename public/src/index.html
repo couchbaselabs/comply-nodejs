@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Couchbase</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+        <link href="css/dashboard.css" rel="stylesheet">
+        <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+        <script src="node_modules/systemjs/dist/system.src.js"></script>
+        <script src="node_modules/rxjs/bundles/Rx.js"></script>
+        <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+        <script src="node_modules/angular2/bundles/http.dev.js"></script>
+        <script src="node_modules/angular2/bundles/router.dev.js"></script>
+        <script>
+            System.config({
+                packages: {'app': {defaultExtension: 'js'}}
+            });
+            System.import('app/app');
+        </script>
+    </head>
+    <body>
+        <my-app>Loading...</my-app>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/ie-emulation-modes-warning.js"></script>
+    </body>
+</html>
