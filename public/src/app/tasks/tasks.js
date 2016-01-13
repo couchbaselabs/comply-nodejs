@@ -13,8 +13,15 @@ var http_1 = require("angular2/http");
 var router_1 = require("angular2/router");
 var TasksPage = (function () {
     function TasksPage(http, routeParams) {
+        var _this = this;
         this.http = http;
-        this.getProject(routeParams.get("projectId"));
+        this.project = {
+            id: "1234",
+            name: "meh",
+            description: "blah"
+        };
+        this.projectId = routeParams.get("projectId");
+        //this.getProject(routeParams.get("projectId"));
         this.tasks = [
             {
                 id: "1234",
@@ -27,28 +34,46 @@ var TasksPage = (function () {
                 description: "Description 2"
             }
         ];
-        /*this.http.get("/api/task/findAll/" + routeParams.get("projectId"))
-        .subscribe((success) => {
+        this.getUsers();
+        this.projectUsers = [];
+        this.http.get("/api/task/getAll/" + routeParams.get("projectId"))
+            .subscribe(function (success) {
             var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.tasks.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name,
-                        description: jsonResponse[i].description
-                    }
-                );
+            for (var i = 0; i < jsonResponse.length; i++) {
+                _this.tasks.push({
+                    id: jsonResponse[i]._id,
+                    name: jsonResponse[i].name,
+                    description: jsonResponse[i].description
+                });
             }
-        }, (error) => {
+        }, function (error) {
             console.error(JSON.stringify(error));
-        });*/
+        });
     }
+    TasksPage.prototype.getUsers = function () {
+        var _this = this;
+        this.users = [];
+        this.http.get("/api/user/getAll")
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            for (var i = 0; i < jsonResponse.length; i++) {
+                _this.users.push({
+                    id: jsonResponse[i]._id,
+                    firstname: jsonResponse[i].name.first,
+                    lastname: jsonResponse[i].name.last
+                });
+            }
+        }, function (error) {
+            console.error(JSON.stringify(error));
+        });
+    };
     TasksPage.prototype.getProject = function (projectId) {
         var _this = this;
-        this.project = {};
+        //this.project = {};
         this.http.get("/api/task/getAll/" + projectId)
             .subscribe(function (success) {
             var jsonResponse = success.json();
+            console.log(JSON.stringify(success.json()));
             _this.project = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
@@ -58,25 +83,50 @@ var TasksPage = (function () {
             console.error(JSON.stringify(error));
         });
     };
-    TasksPage.prototype.create = function (name, description) {
+    TasksPage.prototype.create = function (name, description, owner, assignedTo) {
         var _this = this;
         var postBody = {
             name: name,
-            description: description
+            description: description,
+            owner: owner,
+            assignedTo: assignedTo
         };
         var requestHeaders = new http_1.Headers();
         requestHeaders.append("Content-Type", "application/json");
         this.http.request(new http_1.Request({
             method: http_1.RequestMethod.Post,
-            url: "/api/task/create",
+            url: "/api/task/create/" + this.projectId,
             body: JSON.stringify(postBody),
             headers: requestHeaders
         }))
             .subscribe(function (success) {
+            console.log(JSON.stringify(success.json()));
             postBody.id = success.json()._id;
             _this.tasks.push(postBody);
         }, function (error) {
             //alert("ERROR -> " + JSON.stringify(error));
+            console.log("ERROR -> " + JSON.stringify(error));
+        });
+    };
+    TasksPage.prototype.addUser = function (projectUser) {
+        var _this = this;
+        var postBody = {
+            email: projectUser,
+            projectId: this.project.id
+        };
+        var requestHeaders = new http_1.Headers();
+        requestHeaders.append("Content-Type", "application/json");
+        this.http.request(new http_1.Request({
+            method: http_1.RequestMethod.Post,
+            url: "/api/project/addUser",
+            body: JSON.stringify(postBody),
+            headers: requestHeaders
+        }))
+            .subscribe(function (success) {
+            //postBody.id = success.json()._id;
+            console.log(JSON.stringify(success.json()));
+            _this.projectUsers.unshift({ id: success.json()._id, firstname: success.json().name.first });
+        }, function (error) {
             console.log("ERROR -> " + JSON.stringify(error));
         });
     };

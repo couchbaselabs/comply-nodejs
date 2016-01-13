@@ -9,7 +9,7 @@ var ProjectMdl = ottoman.model("Project", {
         description: "string",
         owner: { ref: "User" },
         users: [{ ref: "User" }],
-        tasks: [{ ref: "Tasks" }],
+        tasks: [{ ref: "Task" }],
         status: "string"
 }, {
     index: {

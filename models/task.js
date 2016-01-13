@@ -7,6 +7,7 @@ var TaskMdl = ottoman.model("Task", {
     createdON: { type: "Date", default:function() {return new Date() }},
     url: "string",
     name: "string",
+    description: "string",
     type: "string",
     owner: {ref: "User"},
     assignedTo: {ref: "User"},

@@ -6,6 +6,21 @@ export interface ITask {
     id?: string,
     name: string,
     description: string,
+    owner: string,
+    assignedTo: string
+}
+
+export interface IProject {
+    id: string,
+    name: string,
+    description: string
+}
+
+export interface IProjectUser {
+    id?: string,
+    firstname?: string,
+    lastname?: string,
+    email: string
 }
 
 @Component({
@@ -21,11 +36,20 @@ export class TasksPage {
 
     http: Http;
     tasks: Array<Object>;
-    project: Object;
+    users: Array<Object>;
+    projectUsers: Array<Object>;
+    project: IProject;
+    projectId: string;
 
     constructor(http: Http, routeParams: RouteParams) {
         this.http = http;
-        this.getProject(routeParams.get("projectId"));
+        this.project = {
+            id: "1234",
+            name: "meh",
+            description: "blah"
+        }
+        this.projectId = routeParams.get("projectId");
+        //this.getProject(routeParams.get("projectId"));
         this.tasks = [
             {
                 id: "1234",
@@ -38,7 +62,9 @@ export class TasksPage {
                 description: "Description 2"
             }
         ];
-        /*this.http.get("/api/task/findAll/" + routeParams.get("projectId"))
+        this.getUsers();
+        this.projectUsers = [];
+        this.http.get("/api/task/getAll/" + routeParams.get("projectId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
             for(var i = 0; i < jsonResponse.length; i++) {
@@ -52,14 +78,34 @@ export class TasksPage {
             }
         }, (error) => {
             console.error(JSON.stringify(error));
-        });*/
+        });
+    }
+
+    getUsers() {
+        this.users = [];
+        this.http.get("/api/user/getAll")
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            for(var i = 0; i < jsonResponse.length; i++) {
+                this.users.push(
+                    {
+                        id: jsonResponse[i]._id,
+                        firstname: jsonResponse[i].name.first,
+                        lastname: jsonResponse[i].name.last
+                    }
+                );
+            }
+        }, (error) => {
+            console.error(JSON.stringify(error));
+        });
     }
 
     getProject(projectId: string) {
-        this.project = {};
+        //this.project = {};
         this.http.get("/api/task/getAll/" + projectId)
         .subscribe((success) => {
             var jsonResponse = success.json();
+            console.log(JSON.stringify(success.json()));
             this.project = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
@@ -70,24 +116,49 @@ export class TasksPage {
         });
     }
 
-    create(name: string, description: string) {
+    create(name: string, description: string, owner: string, assignedTo: string) {
         var postBody: ITask = {
             name: name,
-            description: description
+            description: description,
+            owner: owner,
+            assignedTo: assignedTo
         }
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");
         this.http.request(new Request({
             method: RequestMethod.Post,
-            url: "/api/task/create",
+            url: "/api/task/create/" + this.projectId,
             body: JSON.stringify(postBody),
             headers: requestHeaders
         }))
         .subscribe((success) => {
+            console.log(JSON.stringify(success.json()));
             postBody.id = success.json()._id;
             this.tasks.push(postBody);
         }, (error) => {
             //alert("ERROR -> " + JSON.stringify(error));
+            console.log("ERROR -> " + JSON.stringify(error));
+        });
+    }
+
+    addUser(projectUser: string) {
+        var postBody = {
+            email: projectUser,
+            projectId: this.project.id
+        }
+        var requestHeaders = new Headers();
+        requestHeaders.append("Content-Type", "application/json");
+        this.http.request(new Request({
+            method: RequestMethod.Post,
+            url: "/api/project/addUser",
+            body: JSON.stringify(postBody),
+            headers: requestHeaders
+        }))
+        .subscribe((success) => {
+            //postBody.id = success.json()._id;
+            console.log(JSON.stringify(success.json()));
+            this.projectUsers.unshift({id: success.json()._id, firstname: success.json().name.first});
+        }, (error) => {
             console.log("ERROR -> " + JSON.stringify(error));
         });
     }

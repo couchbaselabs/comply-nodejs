@@ -41,6 +41,31 @@ var appRouter = function(app) {
         });
     });
 
+    app.post("/api/project/addUser", function(req, res) {
+        console.log(JSON.stringify(req.body));
+        ProjectModel.getById(req.body.projectId, function(error, project) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            UserModel.find({email: req.body.email}, function(error, user) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                if(users.length > 0) {
+                    project.users.push(user[0]);
+                    project.save(function(error) {
+                        if(error) {
+                            return res.status(400).send(error);
+                        }
+                        res.send(project);
+                    });
+                } else {
+                    return res.status(400).send({"status": "error", "message": "User does not exist"});
+                }
+            });
+        });
+    });
+
 };
 
 module.exports = appRouter;
