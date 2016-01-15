@@ -67,17 +67,18 @@ export class TasksPage {
         this.http.get("/api/task/getAll/" + routeParams.get("projectId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
+            console.log(JSON.stringify(jsonResponse));
             for(var i = 0; i < jsonResponse.length; i++) {
                 this.tasks.push(
                     {
-                        id: jsonResponse[i]._id,
+                        id: jsonResponse[i].id,
                         name: jsonResponse[i].name,
                         description: jsonResponse[i].description
                     }
                 );
             }
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
 

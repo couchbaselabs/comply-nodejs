@@ -39,15 +39,16 @@ var TasksPage = (function () {
         this.http.get("/api/task/getAll/" + routeParams.get("projectId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
+            console.log(JSON.stringify(jsonResponse));
             for (var i = 0; i < jsonResponse.length; i++) {
                 _this.tasks.push({
-                    id: jsonResponse[i]._id,
+                    id: jsonResponse[i].id,
                     name: jsonResponse[i].name,
                     description: jsonResponse[i].description
                 });
             }
         }, function (error) {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
     TasksPage.prototype.getUsers = function () {

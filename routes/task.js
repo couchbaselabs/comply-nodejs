@@ -21,27 +21,23 @@ var appRouter = function(app) {
         if(!req.params.projectId) {
             return res.status(400).send({"status": "error", "message": "A project id is required"});
         }
-        ProjectModel.getById(req.params.projectId, function(error, project) {
+        ProjectModel.find({"_id": req.params.projectId}, {load: ["tasks"]}, function(error, project) {
             if(error) {
                 return res.status(400).send(error);
             }
-            if(project.tasks.length > 0) {
-                var blueTasks = promise.promisify(project.tasks[0].load);
-                promise.map(project.tasks, function(obj) {
-                    console.log(JSON.stringify(obj));
-                    return blueTasks(obj);
-                })
-                .then(function(transformedResults) {
-                    console.log(JSON.stringify(transformedResults));
-                    res.send(transformedResults);
-                })
-                .catch(function(error) {
-                    console.log(error);
+            var tasks = [];
+            for(var i = 0; i < project[0].tasks.length; i++) {
+                tasks.push({
+                    id: project[0].tasks[i]._id,
+                    users: project[0].tasks[i].users,
+                    history: project[0].tasks[i].history,
+                    name: project[0].tasks[i].name,
+                    description: project[0].tasks[i].description,
+                    owner: project[0].tasks[i].owner,
+                    assignedTo: project[0].tasks[i].assignedTo
                 });
-            } else {
-                res.send([]);
             }
-            //res.send(project);
+            res.send(tasks);
         });
     });
 

@@ -28,17 +28,16 @@ var TaskPage = (function () {
             }
         ];
         this.activity = [];
-        this.http.get("/api/project/get/" + routeParams.get("taskId"))
+        this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
             console.log(JSON.stringify(jsonResponse));
-            for (var i = 0; i < jsonResponse.length; i++) {
-                _this.project = {
-                    id: jsonResponse[i]._id,
-                    name: jsonResponse[i].name,
-                    description: jsonResponse[i].description
-                };
-            }
+            _this.task = {
+                id: jsonResponse._id,
+                name: jsonResponse.name,
+                description: jsonResponse.description,
+                history: jsonResponse.history
+            };
         }, function (error) {
             console.error(JSON.stringify(error));
         });
