@@ -28,8 +28,8 @@ var App = (function () {
             directives: [router_1.ROUTER_DIRECTIVES]
         }),
         router_1.RouteConfig([
-            { path: "/", as: "Companies", component: companies_1.CompaniesPage },
-            { path: "/projects", as: "Projects", component: projects_1.ProjectsPage },
+            { path: "/companies", as: "Companies", component: companies_1.CompaniesPage },
+            { path: "/", as: "Projects", component: projects_1.ProjectsPage },
             { path: "/task/:projectId/:taskId", as: "Task", component: task_1.TaskPage },
             { path: "/users", as: "Users", component: users_1.UsersPage },
             { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage }

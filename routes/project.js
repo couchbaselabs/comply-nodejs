@@ -7,11 +7,38 @@ var appRouter = function(app) {
         if(!req.params.projectId) {
             return res.status(400).send({"status": "error", "message": "A project id is required"});
         }
-        ProjectModel.getById(req.params.projectId, function(error, project) {
+        ProjectModel.getById(req.params.projectId, {load: ["users", "tasks"]}, function(error, project) {
             if(error) {
                 return res.status(400).send(error);
             }
-            res.send(project);
+            var response = {};
+            response._id = project._id;
+            response.name = project.name;
+            response.description = project.description;
+            response.owner = project.owner;
+            response.users = [];
+            response.tasks = [];
+            for(var i = 0; i < project.users.length; i++) {
+                response.users.push({
+                    name: {
+                        first: project.users[i].name.first,
+                        last: project.users[i].name.last
+                    },
+                    email: project.users[i].email
+                });
+            }
+            for(var i = 0; i < project.tasks.length; i++) {
+                response.tasks.push({
+                    id: project.tasks[i]._id,
+                    users: project.tasks[i].users,
+                    history: project.tasks[i].history,
+                    name: project.tasks[i].name,
+                    description: project.tasks[i].description,
+                    owner: project.tasks[i].owner,
+                    assignedTo: project.tasks[i].assignedTo
+                });
+            }
+            res.send(response);
         });
     });
 
@@ -47,22 +74,43 @@ var appRouter = function(app) {
             if(error) {
                 return res.status(400).send(error);
             }
-            UserModel.find({email: req.body.email}, function(error, user) {
+            UserModel.find({email: req.body.email}, function(error, users) {
                 if(error) {
                     return res.status(400).send(error);
                 }
                 if(users.length > 0) {
-                    project.users.push(user[0]);
+                    project.users.push(users[0]);
                     project.save(function(error) {
                         if(error) {
                             return res.status(400).send(error);
                         }
-                        res.send(project);
+                        res.send(users[0]);
                     });
                 } else {
                     return res.status(400).send({"status": "error", "message": "User does not exist"});
                 }
             });
+        });
+    });
+
+    app.get("/api/project/getUsers/:projectId", function(req, res) {
+        if(!req.params.projectId) {
+            return res.status(400).send({"status": "error", "message": "A project id is required"});
+        }
+        ProjectModel.find({"_id": req.params.projectId}, {load: ["users"]}, function(error, project) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            var users = [];
+            for(var i = 0; i < project[0].users.length; i++) {
+                users.push({
+                    id: project[0].users[i]._id,
+                    users: project[0].users[i].name.first,
+                    history: project[0].users[i].name.last,
+                    name: project[0].users[i].email
+                });
+            }
+            res.send(users);
         });
     });
 

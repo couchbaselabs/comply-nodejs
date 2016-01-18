@@ -13,14 +13,9 @@ export interface ITask {
 export interface IProject {
     id: string,
     name: string,
-    description: string
-}
-
-export interface IProjectUser {
-    id?: string,
-    firstname?: string,
-    lastname?: string,
-    email: string
+    description: string,
+    users: Array<Object>,
+    tasks: Array<Object>
 }
 
 @Component({
@@ -29,57 +24,23 @@ export interface IProjectUser {
 })
 
 @View({
-    templateUrl: 'app/tasks/tasks.html'
+    templateUrl: "app/tasks/tasks.html"
 })
 
 export class TasksPage {
 
     http: Http;
-    tasks: Array<Object>;
     users: Array<Object>;
-    projectUsers: Array<Object>;
     project: IProject;
     projectId: string;
+    projectUser: string;
 
     constructor(http: Http, routeParams: RouteParams) {
         this.http = http;
-        this.project = {
-            id: "1234",
-            name: "meh",
-            description: "blah"
-        }
         this.projectId = routeParams.get("projectId");
-        //this.getProject(routeParams.get("projectId"));
-        this.tasks = [
-            {
-                id: "1234",
-                name: "Task 1",
-                description: "Description 1"
-            },
-            {
-                id: "4321",
-                name: "Task 2",
-                description: "Description 2"
-            }
-        ];
+        this.project = { id: "", name: "", description: "", users: null, tasks: null };
+        this.getProject(routeParams.get("projectId"));
         this.getUsers();
-        this.projectUsers = [];
-        this.http.get("/api/task/getAll/" + routeParams.get("projectId"))
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            console.log(JSON.stringify(jsonResponse));
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.tasks.push(
-                    {
-                        id: jsonResponse[i].id,
-                        name: jsonResponse[i].name,
-                        description: jsonResponse[i].description
-                    }
-                );
-            }
-        }, (error) => {
-            console.error(error);
-        });
     }
 
     getUsers() {
@@ -102,15 +63,15 @@ export class TasksPage {
     }
 
     getProject(projectId: string) {
-        //this.project = {};
-        this.http.get("/api/task/getAll/" + projectId)
+        this.http.get("/api/project/get/" + projectId)
         .subscribe((success) => {
             var jsonResponse = success.json();
-            console.log(JSON.stringify(success.json()));
             this.project = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
-                description: jsonResponse.description
+                description: jsonResponse.description,
+                users: jsonResponse.users,
+                tasks: jsonResponse.tasks
             }
         }, (error) => {
             console.error(JSON.stringify(error));
@@ -133,35 +94,34 @@ export class TasksPage {
             headers: requestHeaders
         }))
         .subscribe((success) => {
-            console.log(JSON.stringify(success.json()));
             postBody.id = success.json()._id;
-            this.tasks.push(postBody);
+            this.project.tasks.push(postBody);
         }, (error) => {
-            //alert("ERROR -> " + JSON.stringify(error));
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error(JSON.stringify(error));
         });
     }
 
     addUser(projectUser: string) {
-        var postBody = {
-            email: projectUser,
-            projectId: this.project.id
+        if (projectUser && projectUser != "") {
+            var postBody = {
+                email: projectUser,
+                projectId: this.project.id
+            }
+            var requestHeaders = new Headers();
+            requestHeaders.append("Content-Type", "application/json");
+            this.http.request(new Request({
+                method: RequestMethod.Post,
+                url: "/api/project/addUser",
+                body: JSON.stringify(postBody),
+                headers: requestHeaders
+            }))
+            .subscribe((success) => {
+                this.project.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
+            }, (error) => {
+                console.error(JSON.stringify(error));
+            });
+            this.projectUser = "";
         }
-        var requestHeaders = new Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new Request({
-            method: RequestMethod.Post,
-            url: "/api/project/addUser",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-        .subscribe((success) => {
-            //postBody.id = success.json()._id;
-            console.log(JSON.stringify(success.json()));
-            this.projectUsers.unshift({id: success.json()._id, firstname: success.json().name.first});
-        }, (error) => {
-            console.log("ERROR -> " + JSON.stringify(error));
-        });
     }
 
 }

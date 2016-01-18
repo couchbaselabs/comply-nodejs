@@ -32,8 +32,8 @@ import { TasksPage } from "./tasks/tasks";
 })
 
 @RouteConfig([
-    { path: "/", as: "Companies", component: CompaniesPage },
-    { path: "/projects", as: "Projects", component: ProjectsPage },
+    { path: "/companies", as: "Companies", component: CompaniesPage },
+    { path: "/", as: "Projects", component: ProjectsPage },
     { path: "/task/:projectId/:taskId", as: "Task", component: TaskPage },
     { path: "/users", as: "Users", component: UsersPage },
     { path: "/tasks/:projectId", as: "Tasks", component: TasksPage }
