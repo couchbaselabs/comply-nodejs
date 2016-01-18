@@ -21,8 +21,10 @@ var UsersPage = (function () {
             for (var i = 0; i < jsonResponse.length; i++) {
                 _this.people.push({
                     id: jsonResponse[i]._id,
-                    firstname: jsonResponse[i].name.first,
-                    lastname: jsonResponse[i].name.last,
+                    name: {
+                        first: jsonResponse[i].name.first,
+                        last: jsonResponse[i].name.last,
+                    },
                     company: jsonResponse[i].company
                 });
             }
@@ -66,11 +68,9 @@ var UsersPage = (function () {
             headers: requestHeaders
         }))
             .subscribe(function (success) {
-            postBody.id = success.json()._id;
-            _this.people.push(postBody);
+            _this.people.push(success.json());
         }, function (error) {
-            alert("ERROR -> " + JSON.stringify(error));
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error(JSON.stringify(error));
         });
     };
     UsersPage = __decorate([

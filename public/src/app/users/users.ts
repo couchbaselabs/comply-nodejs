@@ -12,7 +12,7 @@ export interface IPerson {
     country: string,
     phone: string,
     email: string,
-    company: string
+    company: Object
 }
 
 @Component({
@@ -40,8 +40,10 @@ export class UsersPage {
                 this.people.push(
                     {
                         id: jsonResponse[i]._id,
-                        firstname: jsonResponse[i].name.first,
-                        lastname: jsonResponse[i].name.last,
+                        name: {
+                            first: jsonResponse[i].name.first,
+                            last: jsonResponse[i].name.last,
+                        },
                         company: jsonResponse[i].company
                     }
                 );
@@ -88,11 +90,9 @@ export class UsersPage {
             headers: requestHeaders
         }))
         .subscribe((success) => {
-            postBody.id = success.json()._id;
-            this.people.push(postBody);
+            this.people.push(success.json());
         }, (error) => {
-            alert("ERROR -> " + JSON.stringify(error));
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error(JSON.stringify(error));
         });
     }
 }

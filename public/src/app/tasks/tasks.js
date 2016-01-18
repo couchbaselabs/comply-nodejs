@@ -69,8 +69,7 @@ var TasksPage = (function () {
             headers: requestHeaders
         }))
             .subscribe(function (success) {
-            postBody.id = success.json()._id;
-            _this.project.tasks.push(postBody);
+            _this.project.tasks.push(success.json());
         }, function (error) {
             console.error(JSON.stringify(error));
         });

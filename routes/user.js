@@ -46,7 +46,14 @@ var appRouter = function(app) {
             if(error) {
                 return res.status(400).send(error);
             }
-            res.send(req.body);
+            CompanyModel.getById(req.body.company, function(error, company) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                user.company = company;
+                res.send(user);
+            });
+            //res.send(req.body);
         });
     });
 

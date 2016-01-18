@@ -25,7 +25,8 @@ var appRouter = function(app) {
             name: req.body.name,
             description: req.body.description,
             owner: UserModel.ref(req.body.owner),
-            assignedTo: UserModel.ref(req.body.assignedTo)
+            assignedTo: UserModel.ref(req.body.assignedTo),
+            users: [UserModel.ref(req.body.owner)]
         });
         task.save(function(error, result) {
             if(error) {

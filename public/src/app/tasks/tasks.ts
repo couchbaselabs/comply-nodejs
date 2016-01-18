@@ -94,8 +94,7 @@ export class TasksPage {
             headers: requestHeaders
         }))
         .subscribe((success) => {
-            postBody.id = success.json()._id;
-            this.project.tasks.push(postBody);
+            this.project.tasks.push(success.json());
         }, (error) => {
             console.error(JSON.stringify(error));
         });
