@@ -16,18 +16,8 @@ var TaskPage = (function () {
         var _this = this;
         this.http = http;
         this.getProject(routeParams.get("projectId"));
-        this.task = {
-            id: "1234",
-            name: "Test Task",
-            description: "a sample description for a task"
-        };
-        this.users = [
-            {
-                firstname: "Nic",
-                lastname: "Raboy"
-            }
-        ];
-        this.activity = [];
+        this.taskId = routeParams.get("taskId");
+        this.task = { id: "", name: "", description: "", users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
@@ -36,7 +26,8 @@ var TaskPage = (function () {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
                 description: jsonResponse.description,
-                history: jsonResponse.history
+                history: jsonResponse.history,
+                users: jsonResponse.users
             };
         }, function (error) {
             console.error(JSON.stringify(error));
@@ -58,27 +49,60 @@ var TaskPage = (function () {
         });
     };
     TaskPage.prototype.reply = function (comment) {
+        var _this = this;
         if (comment && comment != "") {
-            this.activity.unshift({
-                content: comment,
-                name: "Nic Raboy"
+            var postBody = {
+                log: comment,
+                userId: "a37237a1-21eb-42a0-8395-bf9bb0b8c92b",
+                taskId: this.taskId
+            };
+            var requestHeaders = new http_1.Headers();
+            requestHeaders.append("Content-Type", "application/json");
+            this.http.request(new http_1.Request({
+                method: http_1.RequestMethod.Post,
+                url: "/api/task/addHistory",
+                body: JSON.stringify(postBody),
+                headers: requestHeaders
+            }))
+                .subscribe(function (success) {
+                console.log(success.json());
+                _this.task.history.unshift(success.json());
+            }, function (error) {
+                console.error(JSON.stringify(error));
             });
         }
         this.comment = "";
     };
-    TaskPage.prototype.addUser = function () {
-        this.users.unshift({
-            firstname: "Todd",
-            lastname: "Greenstein"
-        });
+    TaskPage.prototype.addUser = function (taskUser) {
+        var _this = this;
+        if (taskUser && taskUser != "") {
+            var postBody = {
+                email: taskUser,
+                taskId: this.taskId
+            };
+            var requestHeaders = new http_1.Headers();
+            requestHeaders.append("Content-Type", "application/json");
+            this.http.request(new http_1.Request({
+                method: http_1.RequestMethod.Post,
+                url: "/api/task/addUser",
+                body: JSON.stringify(postBody),
+                headers: requestHeaders
+            }))
+                .subscribe(function (success) {
+                _this.task.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last } });
+            }, function (error) {
+                console.error(JSON.stringify(error));
+            });
+            this.taskUser = "";
+        }
     };
     TaskPage = __decorate([
         core_1.Component({
-            selector: 'task',
+            selector: "task",
             viewProviders: [http_1.HTTP_PROVIDERS]
         }),
         core_1.View({
-            templateUrl: 'app/task/task.html'
+            templateUrl: "app/task/task.html"
         }), 
         __metadata('design:paramtypes', [router_1.RouteParams, http_1.Http])
     ], TaskPage);

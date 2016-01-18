@@ -26,9 +26,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="well" *ngFor="#item of activity">
-                        <p class="small"><strong>{{item.name}} - December 22, 2015</strong></p>
-                        <p>{{item.content}}</p>
+                    <div class="well" *ngFor="#item of task.history">
+                        <p class="small"><strong>{{item.user}} {{item.user}} - December 22, 2015</strong></p>
+                        <p>{{item.log}}</p>
                     </div>
                     <div class="well">
                         <p class="small"><strong>Nic Raboy - December 22, 2015</strong></p>
@@ -47,17 +47,13 @@
                     <strong>Users</strong>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item" *ngFor="#user of users">{{user.firstname}} {{user.lastname}}</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
+                    <li class="list-group-item" *ngFor="#user of task.users">{{user.name.first}} {{user.name.last}}</li>
                 </ul>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Add username...">
+                        <input type="text" [(ngModel)]="taskUser" class="form-control" placeholder="Add username...">
                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="button" (click)="addUser()">Add</button>
+                            <button class="btn btn-default" type="button" (click)="addUser(taskUser)">Add</button>
                         </div>
                     </div>
                 </div>

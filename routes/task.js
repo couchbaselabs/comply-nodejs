@@ -1,7 +1,6 @@
 var TaskModel = require("../models/task");
 var ProjectModel = require("../models/project");
 var UserModel = require("../models/user");
-var promise = require("bluebird");
 
 var appRouter = function(app) {
 
@@ -9,35 +8,11 @@ var appRouter = function(app) {
         if(!req.params.taskId) {
             return res.status(400).send({"status": "error", "message": "A task id is required"});
         }
-        TaskModel.getById(req.params.taskId, function(error, task) {
+        TaskModel.getById(req.params.taskId, {load: ["users"]}, function(error, task) {
             if(error) {
                 return res.status(400).send(error);
             }
             res.send(task);
-        });
-    });
-
-    app.get("/api/task/getAll/:projectId", function(req, res) {
-        if(!req.params.projectId) {
-            return res.status(400).send({"status": "error", "message": "A project id is required"});
-        }
-        ProjectModel.find({"_id": req.params.projectId}, {load: ["tasks"]}, function(error, project) {
-            if(error) {
-                return res.status(400).send(error);
-            }
-            var tasks = [];
-            for(var i = 0; i < project[0].tasks.length; i++) {
-                tasks.push({
-                    id: project[0].tasks[i]._id,
-                    users: project[0].tasks[i].users,
-                    history: project[0].tasks[i].history,
-                    name: project[0].tasks[i].name,
-                    description: project[0].tasks[i].description,
-                    owner: project[0].tasks[i].owner,
-                    assignedTo: project[0].tasks[i].assignedTo
-                });
-            }
-            res.send(tasks);
         });
     });
 
@@ -68,6 +43,73 @@ var appRouter = function(app) {
                     res.send(task);
                 });
             });
+        });
+    });
+
+    app.post("/api/task/addUser", function(req, res) {
+        console.log(JSON.stringify(req.body));
+        TaskModel.getById(req.body.taskId, function(error, task) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            UserModel.find({email: req.body.email}, function(error, users) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                if(users.length > 0) {
+                    task.users.push(users[0]);
+                    task.save(function(error) {
+                        if(error) {
+                            return res.status(400).send(error);
+                        }
+                        res.send(users[0]);
+                    });
+                } else {
+                    return res.status(400).send({"status": "error", "message": "User does not exist"});
+                }
+            });
+        });
+    });
+
+    app.post("/api/task/addHistory", function(req, res) {
+        console.log(JSON.stringify(req.body));
+        TaskModel.getById(req.body.taskId, function(error, task) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            var history = {
+                log: req.body.log,
+                user: UserModel.ref(req.body.userId)
+            }
+            task.history.push(history);
+            task.save(function(error) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                UserModel.getById(req.body.userId, function(error, user) {
+                    if(error) {
+                        return res.status(400).send(error);
+                    }
+                    res.send({log: req.body.log, user: user});
+                })
+                //res.send(history);
+            });
+            /*UserModel.find({email: req.body.email}, function(error, users) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                if(users.length > 0) {
+                    task.users.push(users[0]);
+                    task.save(function(error) {
+                        if(error) {
+                            return res.status(400).send(error);
+                        }
+                        res.send(users[0]);
+                    });
+                } else {
+                    return res.status(400).send({"status": "error", "message": "User does not exist"});
+                }
+            });*/
         });
     });
 

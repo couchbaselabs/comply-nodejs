@@ -11,7 +11,7 @@ var appRouter = function(app) {
             if(error) {
                 return res.status(400).send(error);
             }
-            var response = {};
+            /*var response = {};
             response._id = project._id;
             response.name = project.name;
             response.description = project.description;
@@ -38,7 +38,8 @@ var appRouter = function(app) {
                     assignedTo: project.tasks[i].assignedTo
                 });
             }
-            res.send(response);
+            res.send(response);*/
+            res.send(project);
         });
     });
 
