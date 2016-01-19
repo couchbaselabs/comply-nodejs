@@ -1,5 +1,7 @@
 import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Router} from "angular2/router";
+import {AuthManager} from "../authmanager";
 
 export interface IProject {
     id?: string,
@@ -10,7 +12,7 @@ export interface IProject {
 
 @Component({
     selector: 'projects',
-    viewProviders: [HTTP_PROVIDERS]
+    viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
@@ -23,7 +25,10 @@ export class ProjectsPage {
     projects: Array<Object>;
     owners: Array<Object>;
 
-    constructor(http: Http) {
+    constructor(http: Http, router: Router, authManager: AuthManager) {
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.getUsers();
         this.getProjects();

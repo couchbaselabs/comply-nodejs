@@ -1,6 +1,7 @@
 import {Component, View} from "angular2/core";
-import {RouteParams} from "angular2/router";
+import {RouteParams, Router} from "angular2/router";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {AuthManager} from "../authmanager";
 
 export interface ITask {
     id?: string,
@@ -12,7 +13,7 @@ export interface ITask {
 
 @Component({
     selector: "task",
-    viewProviders: [HTTP_PROVIDERS]
+    viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
@@ -29,7 +30,10 @@ export class TaskPage {
     taskId: string;
     taskUser: string;
 
-    constructor(routeParams: RouteParams, http: Http) {
+    constructor(routeParams: RouteParams, http: Http, router: Router, authManager: AuthManager) {
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.getProject(routeParams.get("projectId"));
         this.taskId = routeParams.get("taskId");

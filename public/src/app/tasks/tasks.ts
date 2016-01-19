@@ -1,6 +1,7 @@
 import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
-import {RouteParams} from "angular2/router";
+import {RouteParams, Router} from "angular2/router";
+import {AuthManager} from "../authmanager";
 
 export interface ITask {
     id?: string,
@@ -20,7 +21,7 @@ export interface IProject {
 
 @Component({
     selector: "tasks",
-    viewProviders: [HTTP_PROVIDERS]
+    viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
@@ -35,7 +36,10 @@ export class TasksPage {
     projectId: string;
     projectUser: string;
 
-    constructor(http: Http, routeParams: RouteParams) {
+    constructor(http: Http, routeParams: RouteParams, router: Router, authManager: AuthManager) {
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.projectId = routeParams.get("projectId");
         this.project = { id: "", name: "", description: "", users: null, tasks: null };
@@ -117,7 +121,8 @@ export class TasksPage {
             .subscribe((success) => {
                 this.project.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
             }, (error) => {
-                console.error(JSON.stringify(error));
+                alert(error.json().message);
+                console.error(JSON.stringify(error.json()));
             });
             this.projectUser = "";
         }

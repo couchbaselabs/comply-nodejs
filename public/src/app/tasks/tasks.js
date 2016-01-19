@@ -11,8 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
 var router_1 = require("angular2/router");
+var authmanager_1 = require("../authmanager");
 var TasksPage = (function () {
-    function TasksPage(http, routeParams) {
+    function TasksPage(http, routeParams, router, authManager) {
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.projectId = routeParams.get("projectId");
         this.project = { id: "", name: "", description: "", users: null, tasks: null };
@@ -92,7 +96,8 @@ var TasksPage = (function () {
                 .subscribe(function (success) {
                 _this.project.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last } });
             }, function (error) {
-                console.error(JSON.stringify(error));
+                alert(error.json().message);
+                console.error(JSON.stringify(error.json()));
             });
             this.projectUser = "";
         }
@@ -100,12 +105,12 @@ var TasksPage = (function () {
     TasksPage = __decorate([
         core_1.Component({
             selector: "tasks",
-            viewProviders: [http_1.HTTP_PROVIDERS]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
         }),
         core_1.View({
             templateUrl: "app/tasks/tasks.html"
         }), 
-        __metadata('design:paramtypes', [http_1.Http, router_1.RouteParams])
+        __metadata('design:paramtypes', [http_1.Http, router_1.RouteParams, router_1.Router, authmanager_1.AuthManager])
     ], TasksPage);
     return TasksPage;
 })();

@@ -11,16 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("angular2/core");
 var browser_1 = require("angular2/platform/browser");
 var router_1 = require("angular2/router");
+var http_1 = require("angular2/http");
+var authmanager_1 = require("./authmanager");
 var companies_1 = require("./companies/companies");
 var projects_1 = require("./projects/projects");
 var task_1 = require("./task/task");
 var users_1 = require("./users/users");
 var tasks_1 = require("./tasks/tasks");
+var auth_1 = require("./auth/auth");
 var App = (function () {
-    function App(router, location) {
+    function App(router, location, authManager) {
         this.router = router;
         this.location = location;
+        this.authManager = authManager;
+        if (!this.authManager.isAuthenticated()) {
+            this.router.navigate(["Auth"]);
+        }
     }
+    App.prototype.logout = function () {
+        this.authManager.logout();
+        this.router.navigate(["Auth"]);
+    };
     App = __decorate([
         core_1.Component({
             selector: "my-app",
@@ -32,10 +43,11 @@ var App = (function () {
             { path: "/", as: "Projects", component: projects_1.ProjectsPage },
             { path: "/task/:projectId/:taskId", as: "Task", component: task_1.TaskPage },
             { path: "/users", as: "Users", component: users_1.UsersPage },
-            { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage }
+            { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage },
+            { path: "/auth", as: "Auth", component: auth_1.AuthPage }
         ]), 
-        __metadata('design:paramtypes', [router_1.Router, router_1.Location])
+        __metadata('design:paramtypes', [router_1.Router, router_1.Location, authmanager_1.AuthManager])
     ], App);
     return App;
 })();
-browser_1.bootstrap(App, [router_1.ROUTER_PROVIDERS, core_1.provide(router_1.LocationStrategy, { useClass: router_1.HashLocationStrategy })]);
+browser_1.bootstrap(App, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, core_1.provide(router_1.LocationStrategy, { useClass: router_1.HashLocationStrategy })]);

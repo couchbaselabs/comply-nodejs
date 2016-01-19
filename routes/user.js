@@ -24,6 +24,21 @@ var appRouter = function(app) {
         });
     });
 
+    app.get("/api/user/login/:email/:password", function(req, res) {
+        console.log(req.params);
+        if(!req.params.email) {
+            return res.status(400).send({"status": "error", "message": "An email is required"});
+        } else if(!req.params.password) {
+            return res.status(400).send({"status": "error", "message": "A password is required"});
+        }
+        UserModel.find({email: req.params.email}, function(error, user) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            res.send(user);
+        });
+    });
+
     app.post("/api/user/create", function(req, res) {
         console.log(JSON.stringify(req.body));
         var user = new UserModel({

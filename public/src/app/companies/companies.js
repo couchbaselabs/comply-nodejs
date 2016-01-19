@@ -10,9 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
+var router_1 = require("angular2/router");
+var authmanager_1 = require("../authmanager");
 var CompaniesPage = (function () {
-    function CompaniesPage(http) {
+    function CompaniesPage(http, router, authManager) {
         var _this = this;
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.companies = [];
         this.http.get("/api/company/getAll")
@@ -61,12 +66,12 @@ var CompaniesPage = (function () {
     CompaniesPage = __decorate([
         core_1.Component({
             selector: "companies",
-            viewProviders: [http_1.HTTP_PROVIDERS]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
         }),
         core_1.View({
             templateUrl: "app/companies/companies.html"
         }), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
     ], CompaniesPage);
     return CompaniesPage;
 })();

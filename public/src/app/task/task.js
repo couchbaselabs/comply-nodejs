@@ -11,9 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("angular2/core");
 var router_1 = require("angular2/router");
 var http_1 = require("angular2/http");
+var authmanager_1 = require("../authmanager");
 var TaskPage = (function () {
-    function TaskPage(routeParams, http) {
+    function TaskPage(routeParams, http, router, authManager) {
         var _this = this;
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.getProject(routeParams.get("projectId"));
         this.taskId = routeParams.get("taskId");
@@ -99,12 +103,12 @@ var TaskPage = (function () {
     TaskPage = __decorate([
         core_1.Component({
             selector: "task",
-            viewProviders: [http_1.HTTP_PROVIDERS]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
         }),
         core_1.View({
             templateUrl: "app/task/task.html"
         }), 
-        __metadata('design:paramtypes', [router_1.RouteParams, http_1.Http])
+        __metadata('design:paramtypes', [router_1.RouteParams, http_1.Http, router_1.Router, authmanager_1.AuthManager])
     ], TaskPage);
     return TaskPage;
 })();

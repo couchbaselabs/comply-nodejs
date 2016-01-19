@@ -1,5 +1,7 @@
 import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Router} from "angular2/router";
+import {AuthManager} from "../authmanager";
 
 export interface ICompany {
     id?: string,
@@ -15,7 +17,7 @@ export interface ICompany {
 
 @Component({
     selector: "companies",
-    viewProviders: [HTTP_PROVIDERS]
+    viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
@@ -27,7 +29,10 @@ export class CompaniesPage {
     http: Http;
     companies: Array<Object>;
 
-    constructor(http: Http) {
+    constructor(http: Http, router: Router, authManager: AuthManager) {
+        if (!authManager.isAuthenticated()) {
+            router.navigate(["Auth"]);
+        }
         this.http = http;
         this.companies = [];
         this.http.get("/api/company/getAll")
