@@ -29,11 +29,15 @@ export class AuthManager {
         }
     }
 
+    getAuthToken() {
+        return JSON.parse(localStorage.getItem("user"))._id;
+    }
+
     login(email: string, password: string) {
         return new Promise((resolve, reject) => {
             this.http.get("/api/user/login/" + email + "/" + password)
             .subscribe((success) => {
-                if(success.json().length > 0) {
+                if(success.json()) {
                     localStorage.setItem("user", JSON.stringify(success.json()));
                     resolve(success.json());
                 } else {

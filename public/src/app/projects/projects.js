@@ -14,6 +14,7 @@ var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
 var ProjectsPage = (function () {
     function ProjectsPage(http, router, authManager) {
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -52,7 +53,7 @@ var ProjectsPage = (function () {
                 });
             }
         }, function (error) {
-            console.error(JSON.stringify(error));
+            console.error(error.json());
         });
     };
     ProjectsPage.prototype.create = function (name, description, owner) {

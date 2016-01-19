@@ -22,12 +22,15 @@ var AuthManager = (function () {
             return true;
         }
     };
+    AuthManager.prototype.getAuthToken = function () {
+        return JSON.parse(localStorage.getItem("user"))._id;
+    };
     AuthManager.prototype.login = function (email, password) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.http.get("/api/user/login/" + email + "/" + password)
                 .subscribe(function (success) {
-                if (success.json().length > 0) {
+                if (success.json()) {
                     localStorage.setItem("user", JSON.stringify(success.json()));
                     resolve(success.json());
                 }

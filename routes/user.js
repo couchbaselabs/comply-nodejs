@@ -31,11 +31,11 @@ var appRouter = function(app) {
         } else if(!req.params.password) {
             return res.status(400).send({"status": "error", "message": "A password is required"});
         }
-        UserModel.find({email: req.params.email}, function(error, user) {
+        UserModel.find({email: req.params.email}, function(error, users) {
             if(error) {
                 return res.status(400).send(error);
             }
-            res.send(user);
+            res.send(users[0]);
         });
     });
 

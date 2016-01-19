@@ -24,8 +24,10 @@ export class ProjectsPage {
     http: Http;
     projects: Array<Object>;
     owners: Array<Object>;
+    authManager: AuthManager;
 
     constructor(http: Http, router: Router, authManager: AuthManager) {
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -68,7 +70,7 @@ export class ProjectsPage {
                 );
             }
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error.json());
         });
     }
 
