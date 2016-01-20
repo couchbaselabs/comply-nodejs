@@ -15,13 +15,22 @@ var appRouter = function(app) {
         });
     });
 
-    app.get("/api/project/getAll", function(req, res) {
-        ProjectModel.find({}, function(error, result) {
-            if(error) {
-                return res.status(400).send(error);
-            }
-            res.send(result);
-        });
+    app.get("/api/project/getAll/:ownerId?", function(req, res) {
+        if(req.params.ownerId) {
+            ProjectModel.findByOwner(UserModel.ref(req.params.ownerId), function(error, result) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                res.send(result);
+            });
+        } else {
+            ProjectModel.find({}, function(error, result) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                res.send(result);
+            });
+        }
     });
 
     app.post("/api/project/create", function(req, res) {

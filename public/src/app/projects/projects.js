@@ -42,7 +42,7 @@ var ProjectsPage = (function () {
     ProjectsPage.prototype.getProjects = function () {
         var _this = this;
         this.projects = [];
-        this.http.get("/api/project/getAll")
+        this.http.get("/api/project/getAll/" + this.authManager.getAuthToken())
             .subscribe(function (success) {
             var jsonResponse = success.json();
             for (var i = 0; i < jsonResponse.length; i++) {
@@ -56,12 +56,12 @@ var ProjectsPage = (function () {
             console.error(error.json());
         });
     };
-    ProjectsPage.prototype.create = function (name, description, owner) {
+    ProjectsPage.prototype.create = function (name, description) {
         var _this = this;
         var postBody = {
             name: name,
             description: description,
-            owner: owner
+            owner: this.authManager.getAuthToken()
         };
         var requestHeaders = new http_1.Headers();
         requestHeaders.append("Content-Type", "application/json");

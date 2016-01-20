@@ -35,8 +35,10 @@ export class TasksPage {
     project: IProject;
     projectId: string;
     projectUser: string;
+    authManager: AuthManager;
 
     constructor(http: Http, routeParams: RouteParams, router: Router, authManager: AuthManager) {
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -82,11 +84,11 @@ export class TasksPage {
         });
     }
 
-    create(name: string, description: string, owner: string, assignedTo: string) {
+    create(name: string, description: string, assignedTo: string) {
         var postBody: ITask = {
             name: name,
             description: description,
-            owner: owner,
+            owner: this.authManager.getAuthToken(),
             assignedTo: assignedTo
         }
         var requestHeaders = new Headers();

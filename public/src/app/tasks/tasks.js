@@ -14,6 +14,7 @@ var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
 var TasksPage = (function () {
     function TasksPage(http, routeParams, router, authManager) {
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -56,12 +57,12 @@ var TasksPage = (function () {
             console.error(JSON.stringify(error));
         });
     };
-    TasksPage.prototype.create = function (name, description, owner, assignedTo) {
+    TasksPage.prototype.create = function (name, description, assignedTo) {
         var _this = this;
         var postBody = {
             name: name,
             description: description,
-            owner: owner,
+            owner: this.authManager.getAuthToken(),
             assignedTo: assignedTo
         };
         var requestHeaders = new http_1.Headers();

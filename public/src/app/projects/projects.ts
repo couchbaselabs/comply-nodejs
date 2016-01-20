@@ -57,7 +57,7 @@ export class ProjectsPage {
 
     getProjects() {
         this.projects = [];
-        this.http.get("/api/project/getAll")
+        this.http.get("/api/project/getAll/" + this.authManager.getAuthToken())
         .subscribe((success) => {
             var jsonResponse = success.json();
             for(var i = 0; i < jsonResponse.length; i++) {
@@ -74,11 +74,11 @@ export class ProjectsPage {
         });
     }
 
-    create(name: string, description: string, owner: string) {
+    create(name: string, description: string) {
         var postBody: IProject = {
             name: name,
             description: description,
-            owner: owner
+            owner: this.authManager.getAuthToken()
         }
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");

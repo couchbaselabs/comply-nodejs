@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var couchbase = require("couchbase");
+var ottoman = require("ottoman");
 var path = require("path");
 var config = require("./config");
 var app = express();
@@ -26,6 +27,10 @@ var user = require("./routes/user.js")(app);
 var project = require("./routes/project.js")(app);
 var task = require("./routes/task.js")(app);
 
-var server = app.listen(3000, function () {
-    console.log("Listening on port %s...", server.address().port);
+ottoman.bucket = module.exports.bucket;
+
+ottoman.ensureIndices(function(err) {
+    var server = app.listen(3000, function () {
+        console.log("Listening on port %s...", server.address().port);
+    });
 });
