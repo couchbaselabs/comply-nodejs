@@ -50,7 +50,7 @@ var UsersPage = (function () {
             console.error(JSON.stringify(error));
         });
     }
-    UsersPage.prototype.create = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
+    UsersPage.prototype.create = function (firstname, lastname, street, city, state, zip, country, phone, email, password, company) {
         var _this = this;
         var postBody = {
             name: {
@@ -65,6 +65,7 @@ var UsersPage = (function () {
                 zip: zip
             },
             phone: phone,
+            password: password,
             email: email,
             company: company
         };
@@ -84,11 +85,11 @@ var UsersPage = (function () {
     };
     UsersPage = __decorate([
         core_1.Component({
-            selector: 'users',
+            selector: "users",
             viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
         }),
         core_1.View({
-            templateUrl: 'app/users/users.html'
+            templateUrl: "app/users/users.html"
         }), 
         __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
     ], UsersPage);

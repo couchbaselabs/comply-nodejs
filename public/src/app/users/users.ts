@@ -3,20 +3,6 @@ import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/ht
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
 
-export interface IPerson {
-    id?: string,
-    firstname: string,
-    lastname: string,
-    street: string,
-    city: string,
-    state: string,
-    zip: string,
-    country: string,
-    phone: string,
-    email: string,
-    company: Object
-}
-
 export interface IUser {
     id?: string,
     name: {
@@ -37,12 +23,12 @@ export interface IUser {
 }
 
 @Component({
-    selector: 'users',
+    selector: "users",
     viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
-    templateUrl: 'app/users/users.html'
+    templateUrl: "app/users/users.html"
 })
 
 export class UsersPage {
@@ -92,7 +78,7 @@ export class UsersPage {
         });
     }
 
-    create(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
+    create(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, password: string, company: string) {
         var postBody: IUser = {
             name: {
                 first: firstname,
@@ -106,6 +92,7 @@ export class UsersPage {
                 zip: zip
             },
             phone: phone,
+            password: password,
             email: email,
             company: company
         }
