@@ -3,7 +3,7 @@ import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/ht
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
 
-export interface IPerson {
+/*export interface IUser {
     id?: string,
     firstname: string,
     lastname: string,
@@ -14,6 +14,24 @@ export interface IPerson {
     country: string,
     phone: string,
     email: string,
+    company: Object
+}*/
+
+export interface IUser {
+    id?: string,
+    name: {
+        first: string,
+        last: string
+    },
+    address: {
+        street: string,
+        city: string,
+        state: string,
+        zip: string,
+        country: string
+    },
+    email: string,
+    password: string,
     company: Object
 }
 
@@ -70,7 +88,7 @@ export class AuthPage {
     }
 
     register(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
-        var postBody: IPerson = {
+        /*var postBody: IUser = {
             firstname: firstname,
             lastname: lastname,
             street: street,
@@ -81,21 +99,28 @@ export class AuthPage {
             phone: phone,
             email: email,
             company: company
+        }*/
+        var postBody: IUser = {
+            name: {
+                first: firstname,
+                last: lastname
+            },
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country
+            },
+            email: email,
+            password: "test",
+            company: company
         }
-        var requestHeaders = new Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new Request({
-            method: RequestMethod.Post,
-            url: "/api/user/create",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-        .subscribe((success) => {
-            //this.people.push(success.json());
-            console.log(success.json());
+        this.authManager.register(postBody).then((result) => {
+            console.log(result);
         }, (error) => {
-            console.error(error.json());
-        });
+            console.error(error);
+        });;
     }
 
 }

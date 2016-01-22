@@ -51,6 +51,22 @@ var AuthManager = (function () {
         localStorage.clear();
     };
     AuthManager.prototype.register = function (user) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var requestHeaders = new http_1.Headers();
+            requestHeaders.append("Content-Type", "application/json");
+            _this.http.request(new http_1.Request({
+                method: http_1.RequestMethod.Post,
+                url: "/api/user/create",
+                body: JSON.stringify(user),
+                headers: requestHeaders
+            }))
+                .subscribe(function (success) {
+                resolve(success.json());
+            }, function (error) {
+                reject(error.json());
+            });
+        });
     };
     AuthManager = __decorate([
         core_1.Injectable(), 

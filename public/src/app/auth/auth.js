@@ -50,7 +50,7 @@ var AuthPage = (function () {
         }
     };
     AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
-        var postBody = {
+        /*var postBody: IUser = {
             firstname: firstname,
             lastname: lastname,
             street: street,
@@ -61,21 +61,29 @@ var AuthPage = (function () {
             phone: phone,
             email: email,
             company: company
+        }*/
+        var postBody = {
+            name: {
+                first: firstname,
+                last: lastname
+            },
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country
+            },
+            email: email,
+            password: "test",
+            company: company
         };
-        var requestHeaders = new http_1.Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new http_1.Request({
-            method: http_1.RequestMethod.Post,
-            url: "/api/user/create",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-            .subscribe(function (success) {
-            //this.people.push(success.json());
-            console.log(success.json());
+        this.authManager.register(postBody).then(function (result) {
+            console.log(result);
         }, function (error) {
-            console.error(error.json());
+            console.error(error);
         });
+        ;
     };
     AuthPage = __decorate([
         core_1.Component({
