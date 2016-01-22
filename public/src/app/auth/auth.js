@@ -50,7 +50,6 @@ var AuthPage = (function () {
         }
     };
     AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
-        var _this = this;
         var postBody = {
             firstname: firstname,
             lastname: lastname,
@@ -73,12 +72,7 @@ var AuthPage = (function () {
         }))
             .subscribe(function (success) {
             //this.people.push(success.json());
-            _this.authManager.login(success.json().email, "test").then(function (result) {
-                _this.router.navigate(["Projects"]);
-                console.log(result);
-            }, function (error) {
-                console.error(error);
-            });
+            console.log(success.json());
         }, function (error) {
             console.error(error.json());
         });

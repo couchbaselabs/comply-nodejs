@@ -92,12 +92,7 @@ export class AuthPage {
         }))
         .subscribe((success) => {
             //this.people.push(success.json());
-            this.authManager.login(success.json().email, "test").then((result) => {
-                this.router.navigate(["Projects"]);
-                console.log(result);
-            }, (error) => {
-                console.error(error);
-            });
+            console.log(success.json());
         }, (error) => {
             console.error(error.json());
         });
