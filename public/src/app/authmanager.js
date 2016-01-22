@@ -30,6 +30,14 @@ var AuthManager = (function () {
             return null;
         }
     };
+    AuthManager.prototype.getUserEmail = function () {
+        if (localStorage.getItem("user")) {
+            return JSON.parse(localStorage.getItem("user")).email;
+        }
+        else {
+            return null;
+        }
+    };
     AuthManager.prototype.login = function (email, password) {
         var _this = this;
         return new Promise(function (resolve, reject) {

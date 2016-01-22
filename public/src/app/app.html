@@ -11,11 +11,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a *ngIf="authManager.isAuthenticated()" href="#" [routerLink]="['/Companies']">Companies</a></li>
-                <li><a *ngIf="authManager.isAuthenticated()" href="#" [routerLink]="['/Projects']">Projects</a></li>
-                <li><a *ngIf="authManager.isAuthenticated()" href="#" [routerLink]="['/Users']">Users</a></li>
-                <li><a *ngIf="authManager.isAuthenticated()" href="#" (click)="logout()">Logout</a></li>
-                <li><a *ngIf="!authManager.isAuthenticated()" href="" [routerLink]="['/Auth']">Login</a></li>
+                <li *ngIf="authManager.isAuthenticated()"><a>{{authManager.getUserEmail()}}</a></li>
+                <li *ngIf="authManager.isAuthenticated()"><a href="#" [routerLink]="['/Companies']">Companies</a></li>
+                <li *ngIf="authManager.isAuthenticated()"><a href="#" [routerLink]="['/Projects']">Projects</a></li>
+                <li *ngIf="authManager.isAuthenticated()"><a href="#" (click)="logout()">Logout</a></li>
+                <li *ngIf="!authManager.isAuthenticated()"><a href="" [routerLink]="['/Auth']">Login</a></li>
             </ul>
         </div>
     </div>

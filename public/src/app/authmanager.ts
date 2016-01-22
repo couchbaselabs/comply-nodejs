@@ -46,6 +46,14 @@ export class AuthManager {
         }
     }
 
+    getUserEmail() {
+        if (localStorage.getItem("user")) {
+            return JSON.parse(localStorage.getItem("user")).email;
+        } else {
+            return null;
+        }
+    }
+
     login(email: string, password: string) {
         return new Promise((resolve, reject) => {
             this.http.get("/api/user/login/" + email + "/" + password)

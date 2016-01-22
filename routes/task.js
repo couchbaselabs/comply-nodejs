@@ -20,7 +20,6 @@ var appRouter = function(app) {
      * Create a new task document and push a reference to the matching project document
      */
     app.post("/api/task/create/:projectId", function(req, res) {
-        console.log(JSON.stringify(req.body));
         var task = new TaskModel({
             name: req.body.name,
             description: req.body.description,
@@ -48,7 +47,6 @@ var appRouter = function(app) {
     });
 
     app.post("/api/task/addUser", function(req, res) {
-        console.log(JSON.stringify(req.body));
         TaskModel.getById(req.body.taskId, function(error, task) {
             if(error) {
                 return res.status(400).send(error);
@@ -73,7 +71,6 @@ var appRouter = function(app) {
     });
 
     app.post("/api/task/addHistory", function(req, res) {
-        console.log(JSON.stringify(req.body));
         TaskModel.getById(req.body.taskId, function(error, task) {
             if(error) {
                 return res.status(400).send(error);
