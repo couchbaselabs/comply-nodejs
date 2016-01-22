@@ -48,7 +48,7 @@ var AuthPage = (function () {
             });
         }
     };
-    AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
+    AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, password, company) {
         var _this = this;
         var postBody = {
             name: {
@@ -64,7 +64,7 @@ var AuthPage = (function () {
             },
             email: email,
             phone: phone,
-            password: "test",
+            password: password,
             company: company
         };
         this.authManager.register(postBody).then(function (result) {

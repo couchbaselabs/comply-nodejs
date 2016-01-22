@@ -73,7 +73,7 @@ export class AuthPage {
         }
     }
 
-    register(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
+    register(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, password: string, company: string) {
         var postBody: IUser = {
             name: {
                 first: firstname,
@@ -88,7 +88,7 @@ export class AuthPage {
             },
             email: email,
             phone: phone,
-            password: "test",
+            password: password,
             company: company
         }
         this.authManager.register(postBody).then((result) => {

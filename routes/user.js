@@ -1,3 +1,4 @@
+var bcrypt = require("bcryptjs");
 var UserModel = require("../models/user");
 var CompanyModel = require("../models/company");
 
@@ -34,8 +35,12 @@ var appRouter = function(app) {
             if(error) {
                 return res.status(400).send(error);
             }
-            if(users.length > 1) {
-                res.send(users[0]);
+            if(users.length > 0) {
+                if(bcrypt.compareSync(req.params.password, users[0].password)) {
+                    res.send(users[0]);
+                } else {
+                    res.status(400).send({"status": "error", "message": "Password is invalid"});
+                }
             } else {
                 res.status(400).send({"status": "error", "message": "Email does not exist"});
             }
@@ -57,6 +62,7 @@ var appRouter = function(app) {
             },
             phone: req.body.phone,
             email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 10),
             company: CompanyModel.ref(req.body.company)
         });
         user.save(function(error, result) {
