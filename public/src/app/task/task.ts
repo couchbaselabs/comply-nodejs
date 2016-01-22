@@ -2,14 +2,7 @@ import {Component, View} from "angular2/core";
 import {RouteParams, Router} from "angular2/router";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {AuthManager} from "../authmanager";
-
-export interface ITask {
-    id?: string,
-    name: string,
-    description: string,
-    users: Array<Object>,
-    history: Array<Object>
-}
+import {ITask} from "../interfaces";
 
 @Component({
     selector: "task",
@@ -37,7 +30,7 @@ export class TaskPage {
         this.http = http;
         this.getProject(routeParams.get("projectId"));
         this.taskId = routeParams.get("taskId");
-        this.task = { id: "", name: "", description: "", users: [], history: [] };
+        this.task = { id: "", name: "", description: "", owner: null, assignedTo: null, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
@@ -46,6 +39,8 @@ export class TaskPage {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
                 description: jsonResponse.description,
+                owner: jsonResponse.owner,
+                assignedTo: jsonResponse.assignedTo,
                 history: jsonResponse.history,
                 users: jsonResponse.users
             }

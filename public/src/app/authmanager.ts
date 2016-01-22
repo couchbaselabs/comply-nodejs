@@ -1,24 +1,6 @@
 import {Injectable, Inject} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
-
-export interface IUser {
-    id?: string,
-    name: {
-        first: string,
-        last: string
-    },
-    address: {
-        street: string,
-        city: string,
-        state: string,
-        zip: string,
-        country: string
-    },
-    email: string,
-    phone: string,
-    password: string,
-    company: Object
-}
+import {IUser} from "./interfaces";
 
 @Injectable()
 

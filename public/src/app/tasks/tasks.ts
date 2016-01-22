@@ -2,22 +2,7 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {RouteParams, Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-
-export interface ITask {
-    id?: string,
-    name: string,
-    description: string,
-    owner: string,
-    assignedTo: string
-}
-
-export interface IProject {
-    id: string,
-    name: string,
-    description: string,
-    users: Array<Object>,
-    tasks: Array<Object>
-}
+import {ITask, IProject} from "../interfaces";
 
 @Component({
     selector: "tasks",
@@ -90,7 +75,9 @@ export class TasksPage {
             name: name,
             description: description,
             owner: this.authManager.getAuthToken(),
-            assignedTo: assignedTo
+            assignedTo: assignedTo,
+            users: [],
+            history: []
         }
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");

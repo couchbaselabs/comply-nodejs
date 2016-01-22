@@ -2,25 +2,7 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-
-export interface IUser {
-    id?: string,
-    name: {
-        first: string,
-        last: string
-    },
-    address: {
-        street: string,
-        city: string,
-        state: string,
-        zip: string,
-        country: string
-    },
-    email: string,
-    phone: string,
-    password: string,
-    company: Object
-}
+import {IUser} from "../interfaces";
 
 @Component({
     selector: "users",
