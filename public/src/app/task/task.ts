@@ -22,8 +22,10 @@ export class TaskPage {
     projectId: string;
     taskId: string;
     taskUser: string;
+    authManager: AuthManager;
 
     constructor(routeParams: RouteParams, http: Http, router: Router, authManager: AuthManager) {
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -68,7 +70,7 @@ export class TaskPage {
         if(comment && comment != "") {
             var postBody = {
                 log: comment,
-                userId: "a37237a1-21eb-42a0-8395-bf9bb0b8c92b",
+                userId: this.authManager.getAuthToken(),
                 taskId: this.taskId
             }
             var requestHeaders = new Headers();

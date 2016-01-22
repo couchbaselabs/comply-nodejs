@@ -50,6 +50,7 @@ var TasksPage = (function () {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
                 description: jsonResponse.description,
+                owner: jsonResponse.owner,
                 users: jsonResponse.users,
                 tasks: jsonResponse.tasks
             };

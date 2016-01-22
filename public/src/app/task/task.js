@@ -15,6 +15,7 @@ var authmanager_1 = require("../authmanager");
 var TaskPage = (function () {
     function TaskPage(routeParams, http, router, authManager) {
         var _this = this;
+        this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
@@ -59,7 +60,7 @@ var TaskPage = (function () {
         if (comment && comment != "") {
             var postBody = {
                 log: comment,
-                userId: "a37237a1-21eb-42a0-8395-bf9bb0b8c92b",
+                userId: this.authManager.getAuthToken(),
                 taskId: this.taskId
             };
             var requestHeaders = new http_1.Headers();
