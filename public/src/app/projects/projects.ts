@@ -17,6 +17,7 @@ export class ProjectsPage {
 
     http: Http;
     projects: Array<Object>;
+    otherProjects: Array<Object>;
     owners: Array<Object>;
     authManager: AuthManager;
 
@@ -28,6 +29,7 @@ export class ProjectsPage {
         this.http = http;
         this.getUsers();
         this.getProjects();
+        this.getOtherProjects();
     }
 
     getUsers() {
@@ -62,6 +64,28 @@ export class ProjectsPage {
                         description: jsonResponse[i].description
                     }
                 );
+            }
+        }, (error) => {
+            console.error(error.json());
+        });
+    }
+
+    getOtherProjects() {
+        this.otherProjects = [];
+        this.http.get("/api/project/getOther/" + this.authManager.getAuthToken())
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            for(var i = 0; i < jsonResponse.length; i++) {
+                if(jsonResponse[i].owner._id != this.authManager.getAuthToken()) {
+                    this.otherProjects.push(
+                        {
+                            id: jsonResponse[i]._id,
+                            name: jsonResponse[i].name,
+                            description: jsonResponse[i].description,
+                            owner: jsonResponse[i].owner
+                        }
+                    );
+                }
             }
         }, (error) => {
             console.error(error.json());

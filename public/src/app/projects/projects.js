@@ -21,6 +21,7 @@ var ProjectsPage = (function () {
         this.http = http;
         this.getUsers();
         this.getProjects();
+        this.getOtherProjects();
     }
     ProjectsPage.prototype.getUsers = function () {
         var _this = this;
@@ -51,6 +52,26 @@ var ProjectsPage = (function () {
                     name: jsonResponse[i].name,
                     description: jsonResponse[i].description
                 });
+            }
+        }, function (error) {
+            console.error(error.json());
+        });
+    };
+    ProjectsPage.prototype.getOtherProjects = function () {
+        var _this = this;
+        this.otherProjects = [];
+        this.http.get("/api/project/getOther/" + this.authManager.getAuthToken())
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            for (var i = 0; i < jsonResponse.length; i++) {
+                if (jsonResponse[i].owner._id != _this.authManager.getAuthToken()) {
+                    _this.otherProjects.push({
+                        id: jsonResponse[i]._id,
+                        name: jsonResponse[i].name,
+                        description: jsonResponse[i].description,
+                        owner: jsonResponse[i].owner
+                    });
+                }
             }
         }, function (error) {
             console.error(error.json());

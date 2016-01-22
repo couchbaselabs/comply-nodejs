@@ -31,7 +31,7 @@ export interface IProject {
     id?: string,
     name: string,
     description: string,
-    owner: string,
+    owner: Object,
     users: Array<Object>,
     tasks: Array<Object>
 }

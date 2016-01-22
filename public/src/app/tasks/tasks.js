@@ -20,7 +20,7 @@ var TasksPage = (function () {
         }
         this.http = http;
         this.projectId = routeParams.get("projectId");
-        this.project = { id: "", name: "", description: "", users: [], tasks: null };
+        this.project = { id: "", name: "", description: "", owner: {}, users: [], tasks: null };
         this.getProject(routeParams.get("projectId"));
         this.getUsers();
     }
