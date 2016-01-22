@@ -45,7 +45,6 @@ export class TaskPage {
                 history: jsonResponse.history,
                 users: jsonResponse.users
             };
-            console.log(this.task);
         }, (error) => {
             console.error(JSON.stringify(error));
         });

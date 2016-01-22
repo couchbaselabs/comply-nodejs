@@ -8,7 +8,7 @@ var appRouter = function(app) {
         if(!req.params.taskId) {
             return res.status(400).send({"status": "error", "message": "A task id is required"});
         }
-        TaskModel.getById(req.params.taskId, {load: ["users", "assignedTo"]}, function(error, task) {
+        TaskModel.getById(req.params.taskId, {load: ["users", "assignedTo", "history[*].user"]}, function(error, task) {
             if(error) {
                 return res.status(400).send(error);
             }

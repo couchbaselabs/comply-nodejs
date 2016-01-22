@@ -35,7 +35,6 @@ var TaskPage = (function () {
                 history: jsonResponse.history,
                 users: jsonResponse.users
             };
-            console.log(_this.task);
         }, function (error) {
             console.error(JSON.stringify(error));
         });
