@@ -25,33 +25,35 @@ var appRouter = function(app) {
     });
 
     app.get("/api/user/login/:email/:password", function(req, res) {
-        console.log(req.params);
         if(!req.params.email) {
             return res.status(400).send({"status": "error", "message": "An email is required"});
         } else if(!req.params.password) {
             return res.status(400).send({"status": "error", "message": "A password is required"});
         }
-        UserModel.find({email: req.params.email}, function(error, users) {
+        UserModel.findByEmail(req.params.email, function(error, users) {
             if(error) {
                 return res.status(400).send(error);
             }
-            res.send(users[0]);
+            if(users.length > 1) {
+                res.send(users[0]);
+            } else {
+                res.status(400).send({"status": "error", "message": "Email does not exist"});
+            }
         });
     });
 
     app.post("/api/user/create", function(req, res) {
-        console.log(JSON.stringify(req.body));
         var user = new UserModel({
             name: {
-                first: req.body.firstname,
-                last: req.body.lastname
+                first: req.body.name.first,
+                last: req.body.name.last
             },
             address: {
-                street: req.body.street,
-                city: req.body.city,
-                state: req.body.state,
-                zip: req.body.zip,
-                country: req.body.country
+                street: req.body.address.street,
+                city: req.body.address.city,
+                state: req.body.address.state,
+                zip: req.body.address.zip,
+                country: req.body.address.country
             },
             phone: req.body.phone,
             email: req.body.email,
@@ -68,7 +70,6 @@ var appRouter = function(app) {
                 user.company = company;
                 res.send(user);
             });
-            //res.send(req.body);
         });
     });
 

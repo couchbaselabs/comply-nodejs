@@ -3,20 +3,6 @@ import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/ht
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
 
-/*export interface IUser {
-    id?: string,
-    firstname: string,
-    lastname: string,
-    street: string,
-    city: string,
-    state: string,
-    zip: string,
-    country: string,
-    phone: string,
-    email: string,
-    company: Object
-}*/
-
 export interface IUser {
     id?: string,
     name: {
@@ -31,6 +17,7 @@ export interface IUser {
         country: string
     },
     email: string,
+    phone: string,
     password: string,
     company: Object
 }
@@ -80,7 +67,6 @@ export class AuthPage {
         } else {
             this.authManager.login(email, password).then((result) => {
                 this.router.navigate(["Projects"]);
-                console.log(result);
             }, (error) => {
                 console.error(error);
             });
@@ -88,18 +74,6 @@ export class AuthPage {
     }
 
     register(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
-        /*var postBody: IUser = {
-            firstname: firstname,
-            lastname: lastname,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
-            phone: phone,
-            email: email,
-            company: company
-        }*/
         var postBody: IUser = {
             name: {
                 first: firstname,
@@ -113,11 +87,17 @@ export class AuthPage {
                 country: country
             },
             email: email,
+            phone: phone,
             password: "test",
             company: company
         }
         this.authManager.register(postBody).then((result) => {
-            console.log(result);
+            //console.log(result);
+            this.authManager.login(email, "test").then((result) => {
+                this.router.navigate(["Projects"]);
+            }, (error) => {
+                console.error(error);
+            });
         }, (error) => {
             console.error(error);
         });;

@@ -53,13 +53,17 @@ var UsersPage = (function () {
     UsersPage.prototype.create = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
         var _this = this;
         var postBody = {
-            firstname: firstname,
-            lastname: lastname,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
+            name: {
+                first: firstname,
+                last: lastname
+            },
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
             phone: phone,
             email: email,
             company: company

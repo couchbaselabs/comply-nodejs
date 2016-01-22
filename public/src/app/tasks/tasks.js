@@ -20,7 +20,7 @@ var TasksPage = (function () {
         }
         this.http = http;
         this.projectId = routeParams.get("projectId");
-        this.project = { id: "", name: "", description: "", users: null, tasks: null };
+        this.project = { id: "", name: "", description: "", users: [], tasks: null };
         this.getProject(routeParams.get("projectId"));
         this.getUsers();
     }
@@ -53,6 +53,7 @@ var TasksPage = (function () {
                 users: jsonResponse.users,
                 tasks: jsonResponse.tasks
             };
+            console.log(_this.project.users);
         }, function (error) {
             console.error(JSON.stringify(error));
         });

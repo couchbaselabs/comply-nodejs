@@ -34,7 +34,6 @@ var appRouter = function(app) {
     });
 
     app.post("/api/project/create", function(req, res) {
-        console.log(JSON.stringify(req.body));
         var project = new ProjectModel({
             name: req.body.name,
             description: req.body.description,
@@ -51,7 +50,6 @@ var appRouter = function(app) {
     });
 
     app.post("/api/project/addUser", function(req, res) {
-        console.log(JSON.stringify(req.body));
         ProjectModel.getById(req.body.projectId, function(error, project) {
             if(error) {
                 return res.status(400).send(error);

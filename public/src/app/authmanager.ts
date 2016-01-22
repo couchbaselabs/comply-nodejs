@@ -15,6 +15,7 @@ export interface IUser {
         country: string
     },
     email: string,
+    phone: string,
     password: string,
     company: Object
 }

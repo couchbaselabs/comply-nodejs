@@ -17,6 +17,25 @@ export interface IPerson {
     company: Object
 }
 
+export interface IUser {
+    id?: string,
+    name: {
+        first: string,
+        last: string
+    },
+    address: {
+        street: string,
+        city: string,
+        state: string,
+        zip: string,
+        country: string
+    },
+    email: string,
+    phone: string,
+    password: string,
+    company: Object
+}
+
 @Component({
     selector: 'users',
     viewProviders: [HTTP_PROVIDERS, AuthManager]
@@ -74,14 +93,18 @@ export class UsersPage {
     }
 
     create(firstname: string, lastname: string, street: string, city: string, state: string, zip: string, country: string, phone: string, email: string, company: string) {
-        var postBody: IPerson = {
-            firstname: firstname,
-            lastname: lastname,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
+        var postBody: IUser = {
+            name: {
+                first: firstname,
+                last: lastname
+            },
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
             phone: phone,
             email: email,
             company: company

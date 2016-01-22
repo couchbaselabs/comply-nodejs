@@ -93,24 +93,7 @@ var appRouter = function(app) {
                     }
                     res.send({log: req.body.log, user: user});
                 })
-                //res.send(history);
             });
-            /*UserModel.find({email: req.body.email}, function(error, users) {
-                if(error) {
-                    return res.status(400).send(error);
-                }
-                if(users.length > 0) {
-                    task.users.push(users[0]);
-                    task.save(function(error) {
-                        if(error) {
-                            return res.status(400).send(error);
-                        }
-                        res.send(users[0]);
-                    });
-                } else {
-                    return res.status(400).send({"status": "error", "message": "User does not exist"});
-                }
-            });*/
         });
     });
 

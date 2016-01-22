@@ -44,7 +44,7 @@ export class TasksPage {
         }
         this.http = http;
         this.projectId = routeParams.get("projectId");
-        this.project = { id: "", name: "", description: "", users: null, tasks: null };
+        this.project = { id: "", name: "", description: "", users: [], tasks: null };
         this.getProject(routeParams.get("projectId"));
         this.getUsers();
     }
@@ -78,7 +78,8 @@ export class TasksPage {
                 description: jsonResponse.description,
                 users: jsonResponse.users,
                 tasks: jsonResponse.tasks
-            }
+            };
+            console.log(this.project.users);
         }, (error) => {
             console.error(JSON.stringify(error));
         });

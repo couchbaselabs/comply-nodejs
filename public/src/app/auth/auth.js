@@ -43,25 +43,13 @@ var AuthPage = (function () {
         else {
             this.authManager.login(email, password).then(function (result) {
                 _this.router.navigate(["Projects"]);
-                console.log(result);
             }, function (error) {
                 console.error(error);
             });
         }
     };
     AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
-        /*var postBody: IUser = {
-            firstname: firstname,
-            lastname: lastname,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
-            phone: phone,
-            email: email,
-            company: company
-        }*/
+        var _this = this;
         var postBody = {
             name: {
                 first: firstname,
@@ -75,11 +63,17 @@ var AuthPage = (function () {
                 country: country
             },
             email: email,
+            phone: phone,
             password: "test",
             company: company
         };
         this.authManager.register(postBody).then(function (result) {
-            console.log(result);
+            //console.log(result);
+            _this.authManager.login(email, "test").then(function (result) {
+                _this.router.navigate(["Projects"]);
+            }, function (error) {
+                console.error(error);
+            });
         }, function (error) {
             console.error(error);
         });
