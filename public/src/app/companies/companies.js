@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -39,11 +40,13 @@ var CompaniesPage = (function () {
         var _this = this;
         var postBody = {
             name: name,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
             phone: phone,
             website: website
         };
@@ -59,7 +62,7 @@ var CompaniesPage = (function () {
             postBody.id = success.json()._id;
             _this.companies.push(postBody);
         }, function (error) {
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error("ERROR -> " + JSON.stringify(error));
         });
     };
     CompaniesPage = __decorate([

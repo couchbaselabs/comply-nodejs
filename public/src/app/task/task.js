@@ -25,7 +25,6 @@ var TaskPage = (function () {
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
-            console.log(JSON.stringify(jsonResponse));
             _this.task = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
@@ -71,7 +70,6 @@ var TaskPage = (function () {
                 headers: requestHeaders
             }))
                 .subscribe(function (success) {
-                console.log(success.json());
                 _this.task.history.unshift(success.json());
             }, function (error) {
                 console.error(JSON.stringify(error));

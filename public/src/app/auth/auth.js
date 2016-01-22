@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -67,8 +68,7 @@ var AuthPage = (function () {
             company: company
         };
         this.authManager.register(postBody).then(function (result) {
-            //console.log(result);
-            _this.authManager.login(email, "test").then(function (result) {
+            _this.authManager.login(email, password).then(function (result) {
                 _this.router.navigate(["Projects"]);
             }, function (error) {
                 console.error(error);

@@ -35,3 +35,17 @@ export interface IProject {
     users: Array<Object>,
     tasks: Array<Object>
 }
+
+export interface ICompany {
+    id?: string,
+    name: string,
+    address: {
+        street: string,
+        city: string,
+        state: string,
+        zip: string,
+        country: string
+    }
+    phone: string,
+    website: string
+}

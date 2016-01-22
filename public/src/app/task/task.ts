@@ -34,7 +34,6 @@ export class TaskPage {
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
-            console.log(JSON.stringify(jsonResponse));
             this.task = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
@@ -80,7 +79,6 @@ export class TaskPage {
                 headers: requestHeaders
             }))
             .subscribe((success) => {
-                console.log(success.json());
                 this.task.history.unshift(success.json());
             }, (error) => {
                 console.error(JSON.stringify(error));

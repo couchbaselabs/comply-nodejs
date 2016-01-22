@@ -74,8 +74,7 @@ export class AuthPage {
             company: company
         }
         this.authManager.register(postBody).then((result) => {
-            //console.log(result);
-            this.authManager.login(email, "test").then((result) => {
+            this.authManager.login(email, password).then((result) => {
                 this.router.navigate(["Projects"]);
             }, (error) => {
                 console.error(error);

@@ -76,31 +76,3 @@ var createDefaultCompany = function() {
         });
     });
 }
-
-var createDefaultUser = function(company) {
-    return new Promise(function(resolve, reject) {
-        var user = new UserModel({
-            name: {
-                first: "Arun",
-                last: "Gupta"
-            },
-            address: {
-                street: "2440 West El Camino Real",
-                city: "Mountain View",
-                state: "CA",
-                zip: "94040",
-                country: "USA"
-            },
-            phone: "1234567890",
-            email: "admin@couchbase.com",
-            company: CompanyModel.ref(company._id)
-        });
-        console.log(user);
-        user.save(function(error) {
-            if(error) {
-                reject(error);
-            }
-            resolve(user);
-        });
-    });
-}

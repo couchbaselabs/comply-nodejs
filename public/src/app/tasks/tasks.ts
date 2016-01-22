@@ -64,7 +64,6 @@ export class TasksPage {
                 users: jsonResponse.users,
                 tasks: jsonResponse.tasks
             };
-            console.log(this.project.users);
         }, (error) => {
             console.error(JSON.stringify(error));
         });

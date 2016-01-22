@@ -2,18 +2,7 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-
-export interface ICompany {
-    id?: string,
-    name: string,
-    street: string,
-    city: string,
-    state: string,
-    zip: string,
-    country: string,
-    phone: string,
-    website: string
-}
+import {ICompany} from "../interfaces";
 
 @Component({
     selector: "companies",
@@ -57,11 +46,13 @@ export class CompaniesPage {
     create(name: string, street: string, city: string, state: string, zip: string, country: string, phone: string, website: string) {
         var postBody: ICompany = {
             name: name,
-            street: street,
-            city: city,
-            state: state,
-            country: country,
-            zip: zip,
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
             phone: phone,
             website: website
         }
@@ -77,7 +68,7 @@ export class CompaniesPage {
             postBody.id = success.json()._id;
             this.companies.push(postBody);
         }, (error) => {
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error("ERROR -> " + JSON.stringify(error));
         });
     }
 }

@@ -88,7 +88,7 @@ export class ProjectsPage {
             postBody.id = success.json()._id;
             this.projects.push(postBody);
         }, (error) => {
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error("ERROR -> " + JSON.stringify(error));
         });
     }
 

@@ -77,7 +77,7 @@ var ProjectsPage = (function () {
             postBody.id = success.json()._id;
             _this.projects.push(postBody);
         }, function (error) {
-            console.log("ERROR -> " + JSON.stringify(error));
+            console.error("ERROR -> " + JSON.stringify(error));
         });
     };
     ProjectsPage = __decorate([
