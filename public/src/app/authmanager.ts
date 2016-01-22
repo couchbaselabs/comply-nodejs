@@ -30,7 +30,11 @@ export class AuthManager {
     }
 
     getAuthToken() {
-        return JSON.parse(localStorage.getItem("user"))._id;
+        if (localStorage.getItem("user")) {
+            return JSON.parse(localStorage.getItem("user"))._id;
+        } else {
+            return null;
+        }
     }
 
     login(email: string, password: string) {

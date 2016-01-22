@@ -14,8 +14,23 @@ var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
 var AuthPage = (function () {
     function AuthPage(http, router, authManager) {
+        var _this = this;
         this.router = router;
         this.authManager = authManager;
+        this.http = http;
+        this.companies = [];
+        this.http.get("/api/company/getAll")
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            for (var i = 0; i < jsonResponse.length; i++) {
+                _this.companies.push({
+                    id: jsonResponse[i]._id,
+                    name: jsonResponse[i].name
+                });
+            }
+        }, function (error) {
+            console.error(error.json());
+        });
     }
     AuthPage.prototype.login = function (email, password) {
         var _this = this;
@@ -33,6 +48,40 @@ var AuthPage = (function () {
                 console.error(error);
             });
         }
+    };
+    AuthPage.prototype.register = function (firstname, lastname, street, city, state, zip, country, phone, email, company) {
+        var _this = this;
+        var postBody = {
+            firstname: firstname,
+            lastname: lastname,
+            street: street,
+            city: city,
+            state: state,
+            country: country,
+            zip: zip,
+            phone: phone,
+            email: email,
+            company: company
+        };
+        var requestHeaders = new http_1.Headers();
+        requestHeaders.append("Content-Type", "application/json");
+        this.http.request(new http_1.Request({
+            method: http_1.RequestMethod.Post,
+            url: "/api/user/create",
+            body: JSON.stringify(postBody),
+            headers: requestHeaders
+        }))
+            .subscribe(function (success) {
+            //this.people.push(success.json());
+            _this.authManager.login(success.json().email, "test").then(function (result) {
+                _this.router.navigate(["Projects"]);
+                console.log(result);
+            }, function (error) {
+                console.error(error);
+            });
+        }, function (error) {
+            console.error(error.json());
+        });
     };
     AuthPage = __decorate([
         core_1.Component({

@@ -29,8 +29,78 @@ var task = require("./routes/task.js")(app);
 
 ottoman.bucket = module.exports.bucket;
 
-ottoman.ensureIndices(function(err) {
-    var server = app.listen(3000, function () {
-        console.log("Listening on port %s...", server.address().port);
+var UserModel = require("./models/user");
+var CompanyModel = require("./models/company");
+
+ottoman.ensureIndices(function(error) {
+    if(error) {
+        console.log(error);
+    }
+    CompanyModel.findByCompanyName("Couchbase", function(error, company) {
+        if(company.length < 1) {
+            createDefaultCompany().then(function(result) {
+                var server = app.listen(3000, function() {
+                    console.log("Listening on port %s...", server.address().port);
+                });
+            }, function(error) {
+                console.error(error);
+            });
+        } else {
+            var server = app.listen(3000, function() {
+                console.log("Listening on port %s...", server.address().port);
+            });
+        }
     });
 });
+
+var createDefaultCompany = function() {
+    return new Promise(function(resolve, reject) {
+        var company = new CompanyModel({
+            name: "Couchbase",
+            address: {
+                street: "2440 West El Camino Real",
+                city: "Mountain View",
+                state: "CA",
+                zip: "94040",
+                country: "USA"
+            },
+            phone: "1234567890",
+            website: "https://www.couchbase.com"
+        });
+        console.log(company);
+        company.save(function(error) {
+            if(error) {
+                reject(error);
+            }
+            resolve(company);
+        });
+    });
+}
+
+var createDefaultUser = function(company) {
+    return new Promise(function(resolve, reject) {
+        var user = new UserModel({
+            name: {
+                first: "Arun",
+                last: "Gupta"
+            },
+            address: {
+                street: "2440 West El Camino Real",
+                city: "Mountain View",
+                state: "CA",
+                zip: "94040",
+                country: "USA"
+            },
+            phone: "1234567890",
+            email: "admin@couchbase.com",
+            company: CompanyModel.ref(company._id)
+        });
+        console.log(user);
+        user.save(function(error) {
+            if(error) {
+                reject(error);
+            }
+            resolve(user);
+        });
+    });
+}

@@ -23,7 +23,12 @@ var AuthManager = (function () {
         }
     };
     AuthManager.prototype.getAuthToken = function () {
-        return JSON.parse(localStorage.getItem("user"))._id;
+        if (localStorage.getItem("user")) {
+            return JSON.parse(localStorage.getItem("user"))._id;
+        }
+        else {
+            return null;
+        }
     };
     AuthManager.prototype.login = function (email, password) {
         var _this = this;
