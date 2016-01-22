@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="well" *ngFor="#item of task.history">
-                        <p class="small"><strong>{{item.user.name.first}} {{item.user.name.last}} - December 22, 2015</strong></p>
+                        <p class="small"><strong>{{item.user.name.first}} {{item.user.name.last}} - {{parseDate(item.createdAt)}}</strong></p>
                         <p>{{item.log}}</p>
                     </div>
                 </div>

@@ -104,11 +104,30 @@ export class TaskPage {
                 headers: requestHeaders
             }))
             .subscribe((success) => {
-                this.task.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
+                this.task.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}, createdAt: success.json().createdAt});
             }, (error) => {
                 console.error(JSON.stringify(error));
             });
             this.taskUser = "";
         }
+    }
+
+    parseDate(date: string) {
+        var d: Date = new Date(date);
+        var fullMonth = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+        return fullMonth[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " @ " + d.toLocaleTimeString();
     }
 }

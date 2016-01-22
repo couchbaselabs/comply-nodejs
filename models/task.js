@@ -4,7 +4,7 @@ var validator = require("../validators/validators.js");
 ottoman.bucket = require("../app").bucket;
 
 var TaskMdl = ottoman.model("Task", {
-    createdON: { type: "Date", default:function() {return new Date() }},
+    createdON: { type: "Date", default: function() {return new Date() }},
     url: "string",
     name: "string",
     description: "string",
@@ -19,7 +19,8 @@ var TaskMdl = ottoman.model("Task", {
             log: "string",
             photos: [{type: "string"}],
             url: "string",
-            user: {ref: "User"}
+            user: {ref: "User"},
+            createdAt: { type: "Date", default: function() { return new Date() }}
         }
     ]
 }, {

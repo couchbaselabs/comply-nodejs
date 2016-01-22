@@ -94,12 +94,30 @@ var TaskPage = (function () {
                 headers: requestHeaders
             }))
                 .subscribe(function (success) {
-                _this.task.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last } });
+                _this.task.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last }, createdAt: success.json().createdAt });
             }, function (error) {
                 console.error(JSON.stringify(error));
             });
             this.taskUser = "";
         }
+    };
+    TaskPage.prototype.parseDate = function (date) {
+        var d = new Date(date);
+        var fullMonth = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+        return fullMonth[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " @ " + d.toLocaleTimeString();
     };
     TaskPage = __decorate([
         core_1.Component({

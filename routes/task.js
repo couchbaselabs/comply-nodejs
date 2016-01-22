@@ -77,7 +77,8 @@ var appRouter = function(app) {
             }
             var history = {
                 log: req.body.log,
-                user: UserModel.ref(req.body.userId)
+                user: UserModel.ref(req.body.userId),
+                createdAt: (new Date())
             }
             task.history.push(history);
             task.save(function(error) {
