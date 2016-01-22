@@ -2,21 +2,15 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-
-export interface IProject {
-    id?: string,
-    name: string,
-    description: string,
-    owner: string
-}
+import {IProject} from "../interfaces";
 
 @Component({
-    selector: 'projects',
+    selector: "projects",
     viewProviders: [HTTP_PROVIDERS, AuthManager]
 })
 
 @View({
-    templateUrl: 'app/projects/projects.html'
+    templateUrl: "app/projects/projects.html"
 })
 
 export class ProjectsPage {
@@ -78,7 +72,9 @@ export class ProjectsPage {
         var postBody: IProject = {
             name: name,
             description: description,
-            owner: this.authManager.getAuthToken()
+            owner: this.authManager.getAuthToken(),
+            users: [],
+            tasks: []
         }
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");

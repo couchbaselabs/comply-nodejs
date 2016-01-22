@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,7 +61,9 @@ var ProjectsPage = (function () {
         var postBody = {
             name: name,
             description: description,
-            owner: this.authManager.getAuthToken()
+            owner: this.authManager.getAuthToken(),
+            users: [],
+            tasks: []
         };
         var requestHeaders = new http_1.Headers();
         requestHeaders.append("Content-Type", "application/json");
@@ -79,11 +82,11 @@ var ProjectsPage = (function () {
     };
     ProjectsPage = __decorate([
         core_1.Component({
-            selector: 'projects',
+            selector: "projects",
             viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
         }),
         core_1.View({
-            templateUrl: 'app/projects/projects.html'
+            templateUrl: "app/projects/projects.html"
         }), 
         __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
     ], ProjectsPage);

@@ -28,9 +28,10 @@ export interface ITask {
 }
 
 export interface IProject {
-    id: string,
+    id?: string,
     name: string,
     description: string,
+    owner: string,
     users: Array<Object>,
     tasks: Array<Object>
 }
