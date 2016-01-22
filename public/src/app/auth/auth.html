@@ -104,7 +104,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="register(firstname, lastname, street, city, state, zip, country, phone, email, password, company)">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" *ngIf="company" (click)="register(firstname, lastname, street, city, state, zip, country, phone, email, password, company)">Save</button>
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ export interface ITask {
     name: string,
     description: string,
     owner: string,
-    assignedTo: string,
+    assignedTo: Object,
     users: Array<Object>,
     history: Array<Object>
 }

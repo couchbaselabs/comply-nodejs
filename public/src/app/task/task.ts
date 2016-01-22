@@ -30,7 +30,7 @@ export class TaskPage {
         this.http = http;
         this.getProject(routeParams.get("projectId"));
         this.taskId = routeParams.get("taskId");
-        this.task = { id: "", name: "", description: "", owner: null, assignedTo: null, users: [], history: [] };
+        this.task = { id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
@@ -42,7 +42,8 @@ export class TaskPage {
                 assignedTo: jsonResponse.assignedTo,
                 history: jsonResponse.history,
                 users: jsonResponse.users
-            }
+            };
+            console.log(this.task);
         }, (error) => {
             console.error(JSON.stringify(error));
         });

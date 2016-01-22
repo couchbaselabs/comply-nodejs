@@ -21,7 +21,7 @@ var TaskPage = (function () {
         this.http = http;
         this.getProject(routeParams.get("projectId"));
         this.taskId = routeParams.get("taskId");
-        this.task = { id: "", name: "", description: "", owner: null, assignedTo: null, users: [], history: [] };
+        this.task = { id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
@@ -34,6 +34,7 @@ var TaskPage = (function () {
                 history: jsonResponse.history,
                 users: jsonResponse.users
             };
+            console.log(_this.task);
         }, function (error) {
             console.error(JSON.stringify(error));
         });
