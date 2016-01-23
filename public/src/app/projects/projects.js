@@ -22,6 +22,7 @@ var ProjectsPage = (function () {
         this.getUsers();
         this.getProjects();
         this.getOtherProjects();
+        this.getAssignedTasks();
     }
     ProjectsPage.prototype.getUsers = function () {
         var _this = this;
@@ -70,6 +71,25 @@ var ProjectsPage = (function () {
                         name: jsonResponse[i].name,
                         description: jsonResponse[i].description,
                         owner: jsonResponse[i].owner
+                    });
+                }
+            }
+        }, function (error) {
+            console.error(error.json());
+        });
+    };
+    ProjectsPage.prototype.getAssignedTasks = function () {
+        var _this = this;
+        this.assignedTasks = [];
+        this.http.get("/api/task/getAssignedTo/" + this.authManager.getAuthToken())
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            for (var i = 0; i < jsonResponse.length; i++) {
+                if (jsonResponse[i].owner._id != _this.authManager.getAuthToken()) {
+                    _this.assignedTasks.push({
+                        id: jsonResponse[i]._id,
+                        name: jsonResponse[i].name,
+                        description: jsonResponse[i].description
                     });
                 }
             }

@@ -6,6 +6,19 @@
         </div>
     </div>
     <br />
+    <h4>Tasks I'm Assigned</h4>
+    <div class="row">
+        <div class="col-md-4" *ngFor="#task of assignedTasks">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><a href="/#/task/{{task.id}}">{{task.name}}</a></strong>
+                </div>
+                <div class="panel-body">
+                    {{task.description.substring(0, 200)}} ...
+                </div>
+            </div>
+        </div>
+    </div>
     <h4>Project's I Own</h4>
     <div class="row">
         <div class="col-md-4" *ngFor="#project of projects">

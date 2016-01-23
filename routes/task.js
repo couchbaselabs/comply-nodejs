@@ -12,7 +12,28 @@ var appRouter = function(app) {
             if(error) {
                 return res.status(400).send(error);
             }
-            res.send(task);
+            ProjectModel.find({tasks: {$contains: task}}, function(error, projects) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                if(projects.length > 0) {
+                    res.send({projectId: projects[0]._id, task: task});
+                } else {
+                    res.status(400).send({"status": "error", "message": "Project not found"});
+                }
+            });
+        });
+    });
+
+    app.get("/api/task/getAssignedTo/:userId", function(req, res) {
+        if(!req.params.userId) {
+            return res.status(400).send({"status": "error", "message": "A user id is required"});
+        }
+        TaskModel.findByAssignedTo(req.params.userId, {load: ["owner"]}, function(error, tasks) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            res.send(tasks);
         });
     });
 
@@ -89,7 +110,7 @@ var appRouter = function(app) {
                     if(error) {
                         return res.status(400).send(error);
                     }
-                    res.send({log: req.body.log, user: user});
+                    res.send({log: req.body.log, user: user, createdAt: history.createdAt});
                 })
             });
         });

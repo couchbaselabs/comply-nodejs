@@ -2,7 +2,7 @@ import {Component, View} from "angular2/core";
 import {RouteParams, Router} from "angular2/router";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {AuthManager} from "../authmanager";
-import {ITask} from "../interfaces";
+import {ITask, IProject} from "../interfaces";
 
 @Component({
     selector: "task",
@@ -15,7 +15,7 @@ import {ITask} from "../interfaces";
 
 export class TaskPage {
 
-    project: Object;
+    project: IProject;
     task: ITask;
     comment: String;
     http: Http;
@@ -30,36 +30,39 @@ export class TaskPage {
             router.navigate(["Auth"]);
         }
         this.http = http;
-        this.getProject(routeParams.get("projectId"));
+        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
         this.taskId = routeParams.get("taskId");
         this.task = { id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
             var jsonResponse = success.json();
             this.task = {
-                id: jsonResponse._id,
-                name: jsonResponse.name,
-                description: jsonResponse.description,
-                owner: jsonResponse.owner,
-                assignedTo: jsonResponse.assignedTo,
-                history: jsonResponse.history,
-                users: jsonResponse.users
+                id: jsonResponse.task._id,
+                name: jsonResponse.task.name,
+                description: jsonResponse.task.description,
+                owner: jsonResponse.task.owner,
+                assignedTo: jsonResponse.task.assignedTo,
+                history: jsonResponse.task.history,
+                users: jsonResponse.task.users
             };
+            this.getProject(jsonResponse.projectId);
         }, (error) => {
             console.error(JSON.stringify(error));
         });
     }
 
     getProject(projectId: string) {
-        this.project = {};
         this.http.get("/api/project/get/" + projectId)
         .subscribe((success) => {
             var jsonResponse = success.json();
             this.project = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
-                description: jsonResponse.description
-            }
+                description: jsonResponse.description,
+                owner: jsonResponse.owner,
+                users: jsonResponse.users,
+                tasks: jsonResponse.tasks
+            };
         }, (error) => {
             console.error(JSON.stringify(error));
         });
@@ -104,7 +107,7 @@ export class TaskPage {
                 headers: requestHeaders
             }))
             .subscribe((success) => {
-                this.task.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}, createdAt: success.json().createdAt});
+                this.task.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
             }, (error) => {
                 console.error(JSON.stringify(error));
             });

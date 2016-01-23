@@ -39,7 +39,7 @@ import { AuthPage } from "./auth/auth";
 @RouteConfig([
     { path: "/companies", as: "Companies", component: CompaniesPage },
     { path: "/", as: "Projects", component: ProjectsPage },
-    { path: "/task/:projectId/:taskId", as: "Task", component: TaskPage },
+    { path: "/task/:taskId", as: "Task", component: TaskPage },
     { path: "/users", as: "Users", component: UsersPage },
     { path: "/tasks/:projectId", as: "Tasks", component: TasksPage },
     { path: "/auth", as: "Auth", component: AuthPage }

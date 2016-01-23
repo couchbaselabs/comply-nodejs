@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -40,7 +41,7 @@ var App = (function () {
         router_1.RouteConfig([
             { path: "/companies", as: "Companies", component: companies_1.CompaniesPage },
             { path: "/", as: "Projects", component: projects_1.ProjectsPage },
-            { path: "/task/:projectId/:taskId", as: "Task", component: task_1.TaskPage },
+            { path: "/task/:taskId", as: "Task", component: task_1.TaskPage },
             { path: "/users", as: "Users", component: users_1.UsersPage },
             { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage },
             { path: "/auth", as: "Auth", component: auth_1.AuthPage }

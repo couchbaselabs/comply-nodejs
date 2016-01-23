@@ -35,7 +35,6 @@ var appRouter = function(app) {
 
     app.get("/api/project/getOther/:userId?", function(req, res) {
         if(req.params.userId) {
-            console.log(req.params);
             ProjectModel.find({users: {$contains: UserModel.ref(req.params.userId)}}, {load: ["owner"]}, function(error, result) {
                 if(error) {
                     return res.status(400).send(error);

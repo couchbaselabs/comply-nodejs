@@ -20,35 +20,38 @@ var TaskPage = (function () {
             router.navigate(["Auth"]);
         }
         this.http = http;
-        this.getProject(routeParams.get("projectId"));
+        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
         this.taskId = routeParams.get("taskId");
         this.task = { id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
             var jsonResponse = success.json();
             _this.task = {
-                id: jsonResponse._id,
-                name: jsonResponse.name,
-                description: jsonResponse.description,
-                owner: jsonResponse.owner,
-                assignedTo: jsonResponse.assignedTo,
-                history: jsonResponse.history,
-                users: jsonResponse.users
+                id: jsonResponse.task._id,
+                name: jsonResponse.task.name,
+                description: jsonResponse.task.description,
+                owner: jsonResponse.task.owner,
+                assignedTo: jsonResponse.task.assignedTo,
+                history: jsonResponse.task.history,
+                users: jsonResponse.task.users
             };
+            _this.getProject(jsonResponse.projectId);
         }, function (error) {
             console.error(JSON.stringify(error));
         });
     }
     TaskPage.prototype.getProject = function (projectId) {
         var _this = this;
-        this.project = {};
         this.http.get("/api/project/get/" + projectId)
             .subscribe(function (success) {
             var jsonResponse = success.json();
             _this.project = {
                 id: jsonResponse._id,
                 name: jsonResponse.name,
-                description: jsonResponse.description
+                description: jsonResponse.description,
+                owner: jsonResponse.owner,
+                users: jsonResponse.users,
+                tasks: jsonResponse.tasks
             };
         }, function (error) {
             console.error(JSON.stringify(error));
@@ -94,7 +97,7 @@ var TaskPage = (function () {
                 headers: requestHeaders
             }))
                 .subscribe(function (success) {
-                _this.task.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last }, createdAt: success.json().createdAt });
+                _this.task.users.unshift({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last } });
             }, function (error) {
                 console.error(JSON.stringify(error));
             });

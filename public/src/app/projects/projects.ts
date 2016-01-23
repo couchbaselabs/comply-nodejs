@@ -18,6 +18,7 @@ export class ProjectsPage {
     http: Http;
     projects: Array<Object>;
     otherProjects: Array<Object>;
+    assignedTasks: Array<Object>;
     owners: Array<Object>;
     authManager: AuthManager;
 
@@ -30,6 +31,7 @@ export class ProjectsPage {
         this.getUsers();
         this.getProjects();
         this.getOtherProjects();
+        this.getAssignedTasks();
     }
 
     getUsers() {
@@ -83,6 +85,27 @@ export class ProjectsPage {
                             name: jsonResponse[i].name,
                             description: jsonResponse[i].description,
                             owner: jsonResponse[i].owner
+                        }
+                    );
+                }
+            }
+        }, (error) => {
+            console.error(error.json());
+        });
+    }
+
+    getAssignedTasks() {
+        this.assignedTasks = [];
+        this.http.get("/api/task/getAssignedTo/" + this.authManager.getAuthToken())
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            for(var i = 0; i < jsonResponse.length; i++) {
+                if(jsonResponse[i].owner._id != this.authManager.getAuthToken()) {
+                    this.assignedTasks.push(
+                        {
+                            id: jsonResponse[i]._id,
+                            name: jsonResponse[i].name,
+                            description: jsonResponse[i].description
                         }
                     );
                 }
