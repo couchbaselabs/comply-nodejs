@@ -39,7 +39,11 @@
                     <strong>Assigned To</strong>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item">{{task.assignedTo.name.first}} {{task.assignedTo.name.last}}</li>
+                    <li class="list-group-item">
+                        <select class="form-control" [(ngModel)]="task.assignedTo._id" (change)="change(task.assignedTo._id)">
+                            <option *ngFor="#user of users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
+                        </select>
+                    </li>
                 </ul>
             </div>
             <div class="panel panel-default">

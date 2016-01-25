@@ -91,6 +91,26 @@ var appRouter = function(app) {
         });
     });
 
+    app.post("/api/task/assignUser", function(req, res) {
+        TaskModel.getById(req.body.taskId, function(error, task) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            UserModel.getById(req.body.userId, function(error, user) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                task.assignedTo = user;
+                task.save(function(error) {
+                    if(error) {
+                        return res.status(400).send(error);
+                    }
+                    res.send(user);
+                });
+            });
+        });
+    });
+
     app.post("/api/task/addHistory", function(req, res) {
         TaskModel.getById(req.body.taskId, function(error, task) {
             if(error) {

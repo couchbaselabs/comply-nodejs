@@ -21,7 +21,9 @@ var TaskPage = (function () {
         }
         this.http = http;
         this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
+        this.users = [];
         this.taskId = routeParams.get("taskId");
+        this.getUsers();
         this.task = { id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
             .subscribe(function (success) {
@@ -103,6 +105,44 @@ var TaskPage = (function () {
             });
             this.taskUser = "";
         }
+    };
+    TaskPage.prototype.getUsers = function () {
+        var _this = this;
+        this.users = [];
+        this.http.get("/api/user/getAll")
+            .subscribe(function (success) {
+            var jsonResponse = success.json();
+            for (var i = 0; i < jsonResponse.length; i++) {
+                _this.users.push({
+                    id: jsonResponse[i]._id,
+                    firstname: jsonResponse[i].name.first,
+                    lastname: jsonResponse[i].name.last,
+                    email: jsonResponse[i].email
+                });
+            }
+        }, function (error) {
+            console.error(JSON.stringify(error));
+        });
+    };
+    TaskPage.prototype.change = function (userId) {
+        var postBody = {
+            userId: userId,
+            taskId: this.taskId
+        };
+        console.log(userId);
+        var requestHeaders = new http_1.Headers();
+        requestHeaders.append("Content-Type", "application/json");
+        this.http.request(new http_1.Request({
+            method: http_1.RequestMethod.Post,
+            url: "/api/task/assignUser",
+            body: JSON.stringify(postBody),
+            headers: requestHeaders
+        }))
+            .subscribe(function (success) {
+            console.log({ id: success.json()._id, name: { "first": success.json().name.first, "last": success.json().name.last } });
+        }, function (error) {
+            console.error(JSON.stringify(error));
+        });
     };
     TaskPage.prototype.parseDate = function (date) {
         var d = new Date(date);

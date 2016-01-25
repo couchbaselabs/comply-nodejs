@@ -23,6 +23,7 @@ export class TaskPage {
     taskId: string;
     taskUser: string;
     authManager: AuthManager;
+    users: Array<Object>;
 
     constructor(routeParams: RouteParams, http: Http, router: Router, authManager: AuthManager) {
         this.authManager = authManager;
@@ -31,7 +32,9 @@ export class TaskPage {
         }
         this.http = http;
         this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
+        this.users = [];
         this.taskId = routeParams.get("taskId");
+        this.getUsers();
         this.task = { id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
         this.http.get("/api/task/get/" + routeParams.get("taskId"))
         .subscribe((success) => {
@@ -113,6 +116,47 @@ export class TaskPage {
             });
             this.taskUser = "";
         }
+    }
+
+    getUsers() {
+        this.users = [];
+        this.http.get("/api/user/getAll")
+        .subscribe((success) => {
+            var jsonResponse = success.json();
+            for(var i = 0; i < jsonResponse.length; i++) {
+                this.users.push(
+                    {
+                        id: jsonResponse[i]._id,
+                        firstname: jsonResponse[i].name.first,
+                        lastname: jsonResponse[i].name.last,
+                        email: jsonResponse[i].email
+                    }
+                );
+            }
+        }, (error) => {
+            console.error(JSON.stringify(error));
+        });
+    }
+
+    change(userId) {
+        var postBody = {
+            userId: userId,
+            taskId: this.taskId
+        }
+        console.log(userId);
+        var requestHeaders = new Headers();
+        requestHeaders.append("Content-Type", "application/json");
+        this.http.request(new Request({
+            method: RequestMethod.Post,
+            url: "/api/task/assignUser",
+            body: JSON.stringify(postBody),
+            headers: requestHeaders
+        }))
+        .subscribe((success) => {
+            console.log({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
+        }, (error) => {
+            console.error(JSON.stringify(error));
+        });
     }
 
     parseDate(date: string) {
