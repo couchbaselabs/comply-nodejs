@@ -2,11 +2,12 @@ import {Component, View} from "angular2/core";
 import {RouteParams, Router} from "angular2/router";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {AuthManager} from "../authmanager";
-import {ITask, IProject} from "../interfaces";
+import {ITask, IProject, IUser} from "../interfaces";
+import {Utility} from "../utility";
 
 @Component({
     selector: "task",
-    viewProviders: [HTTP_PROVIDERS, AuthManager]
+    viewProviders: [HTTP_PROVIDERS, AuthManager, Utility]
 })
 
 @View({
@@ -23,73 +24,47 @@ export class TaskPage {
     taskId: string;
     taskUser: string;
     authManager: AuthManager;
-    users: Array<Object>;
+    users: Array<IUser>;
+    utility: Utility;
 
-    constructor(routeParams: RouteParams, http: Http, router: Router, authManager: AuthManager) {
+    constructor(routeParams: RouteParams, http: Http, router: Router, authManager: AuthManager, utility: Utility) {
         this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
         this.http = http;
-        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
+        this.utility = utility;
         this.users = [];
         this.taskId = routeParams.get("taskId");
-        this.getUsers();
+        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
         this.task = { id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
-        this.http.get("/api/task/get/" + routeParams.get("taskId"))
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            this.task = {
-                id: jsonResponse.task._id,
-                name: jsonResponse.task.name,
-                description: jsonResponse.task.description,
-                owner: jsonResponse.task.owner,
-                assignedTo: jsonResponse.task.assignedTo,
-                history: jsonResponse.task.history,
-                users: jsonResponse.task.users
-            };
-            this.getProject(jsonResponse.projectId);
+        this.getTask(this.taskId);
+        this.getUsers();
+    }
+
+    getTask(taskId) {
+        this.utility.makeGetRequest("/api/task/get", [taskId]).then((result: any) => {
+            this.task = <ITask> result.task;
+            this.getProject(result.projectId);
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
 
     getProject(projectId: string) {
-        this.http.get("/api/project/get/" + projectId)
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            this.project = {
-                id: jsonResponse._id,
-                name: jsonResponse.name,
-                description: jsonResponse.description,
-                owner: jsonResponse.owner,
-                users: jsonResponse.users,
-                tasks: jsonResponse.tasks
-            };
+        this.utility.makeGetRequest("/api/project/get", [projectId]).then((result) => {
+            this.project = <IProject> result;
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.log(error);
         });
     }
 
     reply(comment: String) {
         if(comment && comment != "") {
-            var postBody = {
-                log: comment,
-                userId: this.authManager.getAuthToken(),
-                taskId: this.taskId
-            }
-            var requestHeaders = new Headers();
-            requestHeaders.append("Content-Type", "application/json");
-            this.http.request(new Request({
-                method: RequestMethod.Post,
-                url: "/api/task/addHistory",
-                body: JSON.stringify(postBody),
-                headers: requestHeaders
-            }))
-            .subscribe((success) => {
-                this.task.history.unshift(success.json());
+            this.utility.makePostRequest("/api/task/addHistory", [], {log: comment, userId: this.authManager.getAuthToken(), taskId: this.taskId}).then((result) => {
+                this.task.history.unshift(result);
             }, (error) => {
-                console.error(JSON.stringify(error));
+                console.error(error);
             });
         }
         this.comment = "";
@@ -97,64 +72,28 @@ export class TaskPage {
 
     addUser(taskUser: string) {
         if (taskUser && taskUser != "") {
-            var postBody = {
-                email: taskUser,
-                taskId: this.taskId
-            }
-            var requestHeaders = new Headers();
-            requestHeaders.append("Content-Type", "application/json");
-            this.http.request(new Request({
-                method: RequestMethod.Post,
-                url: "/api/task/addUser",
-                body: JSON.stringify(postBody),
-                headers: requestHeaders
-            }))
-            .subscribe((success) => {
-                this.task.users.unshift({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
+            this.utility.makePostRequest("/api/task/addUser", [], {email: taskUser, taskId: this.taskId}).then((result) => {
+                this.task.users.unshift(<IUser> result);
             }, (error) => {
-                console.error(JSON.stringify(error));
+                console.error(error);
             });
             this.taskUser = "";
         }
     }
 
     getUsers() {
-        this.users = [];
-        this.http.get("/api/user/getAll")
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.users.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        firstname: jsonResponse[i].name.first,
-                        lastname: jsonResponse[i].name.last,
-                        email: jsonResponse[i].email
-                    }
-                );
-            }
+        this.utility.makeGetRequest("/api/user/getAll", []).then((result) => {
+            this.users = <Array<IUser>> result;
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
 
     change(event) {
-        var postBody = {
-            userId: event.target.value,
-            taskId: this.taskId
-        }
-        var requestHeaders = new Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new Request({
-            method: RequestMethod.Post,
-            url: "/api/task/assignUser",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-        .subscribe((success) => {
-            console.log({id: success.json()._id, name: {"first": success.json().name.first, "last": success.json().name.last}});
+        this.utility.makePostRequest("/api/task/assignUser", [], {userId: event.target.value, taskId: this.taskId}).then((result) => {
+            console.log(<IUser> result);
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
 

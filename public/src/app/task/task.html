@@ -1,5 +1,5 @@
 <div class="main">
-    <h1 class="page-header"><a href="/#/tasks/{{project.id}}">{{project.name}}</a> / <small>{{task.name}}</small></h1>
+    <h1 class="page-header"><a href="/#/tasks/{{project._id}}">{{project.name}}</a> / <small>{{task.name}}</small></h1>
     <div class="well">
         <p>
             {{task.description}}
@@ -41,7 +41,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <select class="form-control" [(ngModel)]="task.assignedTo._id" (change)="change($event)">
-                            <option *ngFor="#user of users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
+                            <option *ngFor="#user of users" value="{{user._id}}">{{user.name.first}} {{user.name.last}}</option>
                         </select>
                     </li>
                 </ul>
