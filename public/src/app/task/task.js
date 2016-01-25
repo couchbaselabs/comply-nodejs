@@ -124,12 +124,11 @@ var TaskPage = (function () {
             console.error(JSON.stringify(error));
         });
     };
-    TaskPage.prototype.change = function (userId) {
+    TaskPage.prototype.change = function (event) {
         var postBody = {
-            userId: userId,
+            userId: event.target.value,
             taskId: this.taskId
         };
-        console.log(userId);
         var requestHeaders = new http_1.Headers();
         requestHeaders.append("Content-Type", "application/json");
         this.http.request(new http_1.Request({

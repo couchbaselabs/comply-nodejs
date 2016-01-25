@@ -138,12 +138,11 @@ export class TaskPage {
         });
     }
 
-    change(userId) {
+    change(event) {
         var postBody = {
-            userId: userId,
+            userId: event.target.value,
             taskId: this.taskId
         }
-        console.log(userId);
         var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");
         this.http.request(new Request({

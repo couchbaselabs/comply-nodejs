@@ -40,7 +40,7 @@
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <select class="form-control" [(ngModel)]="task.assignedTo._id" (change)="change(task.assignedTo._id)">
+                        <select class="form-control" [(ngModel)]="task.assignedTo._id" (change)="change($event)">
                             <option *ngFor="#user of users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
                         </select>
                     </li>
