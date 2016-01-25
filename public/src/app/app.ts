@@ -22,11 +22,11 @@ import {
 import {HTTP_PROVIDERS} from "angular2/http";
 
 import { AuthManager } from "./authmanager";
+import { Utility } from "./utility";
 
 import { CompaniesPage } from "./companies/companies";
 import { ProjectsPage } from "./projects/projects";
 import { TaskPage } from "./task/task";
-import { UsersPage } from "./users/users";
 import { TasksPage } from "./tasks/tasks";
 import { AuthPage } from "./auth/auth";
 
@@ -40,7 +40,6 @@ import { AuthPage } from "./auth/auth";
     { path: "/companies", as: "Companies", component: CompaniesPage },
     { path: "/", as: "Projects", component: ProjectsPage },
     { path: "/task/:taskId", as: "Task", component: TaskPage },
-    { path: "/users", as: "Users", component: UsersPage },
     { path: "/tasks/:projectId", as: "Tasks", component: TasksPage },
     { path: "/auth", as: "Auth", component: AuthPage }
 ])
@@ -67,4 +66,4 @@ class App {
 
 }
 
-bootstrap(App, [ROUTER_PROVIDERS, HTTP_PROVIDERS, AuthManager, provide(LocationStrategy, {useClass: HashLocationStrategy})]);
+bootstrap(App, [ROUTER_PROVIDERS, HTTP_PROVIDERS, AuthManager, Utility, provide(LocationStrategy, {useClass: HashLocationStrategy})]);

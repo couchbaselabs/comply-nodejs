@@ -2,11 +2,12 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-import {IUser} from "../interfaces";
+import {IUser, ICompany} from "../interfaces";
+import {Utility} from "../utility";
 
 @Component({
     selector: "auth",
-    viewProviders: [HTTP_PROVIDERS, AuthManager]
+    viewProviders: [HTTP_PROVIDERS, AuthManager, Utility]
 })
 
 @View({
@@ -18,27 +19,26 @@ export class AuthPage {
     http: Http;
     authManager: AuthManager;
     router: Router;
-    companies: Array<Object>;
+    companies: Array<ICompany>;
+    userCompany: string;
+    utility: Utility;
 
-    constructor(http: Http, router: Router, authManager: AuthManager) {
+    constructor(http: Http, router: Router, authManager: AuthManager, utility: Utility) {
         this.router = router;
         this.authManager = authManager;
         this.http = http;
+        this.utility = utility;
         this.companies = [];
-        this.http.get("/api/company/getAll")
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.companies.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name
-                    }
-                );
-            }
+        this.userCompany = "";
+        this.utility.makeGetRequest("/api/company/getAll", []).then((result) => {
+            this.companies = <Array<ICompany>> result;
         }, (error) => {
-            console.error(error.json());
+            console.error(error);
         });
+    }
+
+    changeCompany(companyId) {
+        console.log(companyId);
     }
 
     login(email: string, password: string) {

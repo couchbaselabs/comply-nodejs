@@ -27,11 +27,11 @@ var appRouter = function(app) {
         var company = new CompanyModel({
             name: req.body.name,
             address: {
-                street: req.body.street,
-                city: req.body.city,
-                state: req.body.state,
-                zip: req.body.zip,
-                country: req.body.country
+                street: req.body.address.street,
+                city: req.body.address.city,
+                state: req.body.address.state,
+                zip: req.body.address.zip,
+                country: req.body.address.country
             },
             phone: req.body.phone,
             website: req.body.website

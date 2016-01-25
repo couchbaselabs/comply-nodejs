@@ -66,7 +66,7 @@
                         <div class="col-sm-10">
                             <select class="form-control" [(ngModel)]="assignedTo">
                                 <option value="" disabled selected>Select...</option>
-                                <option *ngFor="#user of users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
+                                <option *ngFor="#user of users" value="{{user._id}}">{{user.name.first}} {{user.name.last}}</option>
                             </select>
                         </div>
                     </div>

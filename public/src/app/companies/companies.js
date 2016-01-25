@@ -12,33 +12,25 @@ var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
 var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
+var utility_1 = require("../utility");
 var CompaniesPage = (function () {
-    function CompaniesPage(http, router, authManager) {
+    function CompaniesPage(http, router, authManager, utility) {
         var _this = this;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
         this.http = http;
+        this.utility = utility;
         this.companies = [];
-        this.http.get("/api/company/getAll")
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                _this.companies.push({
-                    id: jsonResponse[i]._id,
-                    name: jsonResponse[i].name,
-                    city: jsonResponse[i].address.city,
-                    state: jsonResponse[i].address.state,
-                    website: jsonResponse[i].website
-                });
-            }
+        this.utility.makeGetRequest("/api/company/getAll", []).then(function (result) {
+            _this.companies = result;
         }, function (error) {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
     CompaniesPage.prototype.create = function (name, street, city, state, zip, country, phone, website) {
         var _this = this;
-        var postBody = {
+        /*var postBody: ICompany = {
             name: name,
             address: {
                 street: street,
@@ -49,31 +41,47 @@ var CompaniesPage = (function () {
             },
             phone: phone,
             website: website
-        };
-        var requestHeaders = new http_1.Headers();
+        }
+        var requestHeaders = new Headers();
         requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new http_1.Request({
-            method: http_1.RequestMethod.Post,
+        this.http.request(new Request({
+            method: RequestMethod.Post,
             url: "/api/company/create",
             body: JSON.stringify(postBody),
             headers: requestHeaders
         }))
-            .subscribe(function (success) {
+        .subscribe((success) => {
             postBody.id = success.json()._id;
-            _this.companies.push(postBody);
-        }, function (error) {
+            this.companies.push(postBody);
+        }, (error) => {
             console.error("ERROR -> " + JSON.stringify(error));
+        });*/
+        this.utility.makePostRequest("/api/company/create", [], {
+            name: name,
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
+            phone: phone,
+            website: website
+        }).then(function (result) {
+            _this.companies.push(result);
+        }, function (error) {
+            console.error(error);
         });
     };
     CompaniesPage = __decorate([
         core_1.Component({
             selector: "companies",
-            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, utility_1.Utility]
         }),
         core_1.View({
             templateUrl: "app/companies/companies.html"
         }), 
-        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager, utility_1.Utility])
     ], CompaniesPage);
     return CompaniesPage;
 })();

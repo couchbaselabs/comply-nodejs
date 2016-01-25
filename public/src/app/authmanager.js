@@ -10,9 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
+var utility_1 = require("./utility");
 var AuthManager = (function () {
-    function AuthManager(http) {
+    function AuthManager(http, utility) {
         this.http = http;
+        this.utility = utility;
     }
     AuthManager.prototype.isAuthenticated = function () {
         if (!localStorage.getItem("user") || localStorage.getItem("user") == "") {
@@ -41,17 +43,16 @@ var AuthManager = (function () {
     AuthManager.prototype.login = function (email, password) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.http.get("/api/user/login/" + email + "/" + password)
-                .subscribe(function (success) {
-                if (success.json()) {
-                    localStorage.setItem("user", JSON.stringify(success.json()));
-                    resolve(success.json());
+            _this.utility.makeGetRequest("/api/user/login", [email, password]).then(function (result) {
+                if (result) {
+                    localStorage.setItem("user", JSON.stringify(result));
+                    resolve(result);
                 }
                 else {
                     reject("User not found");
                 }
             }, function (error) {
-                reject(error.json());
+                reject(error);
             });
         });
     };
@@ -59,26 +60,11 @@ var AuthManager = (function () {
         localStorage.clear();
     };
     AuthManager.prototype.register = function (user) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            var requestHeaders = new http_1.Headers();
-            requestHeaders.append("Content-Type", "application/json");
-            _this.http.request(new http_1.Request({
-                method: http_1.RequestMethod.Post,
-                url: "/api/user/create",
-                body: JSON.stringify(user),
-                headers: requestHeaders
-            }))
-                .subscribe(function (success) {
-                resolve(success.json());
-            }, function (error) {
-                reject(error.json());
-            });
-        });
+        return this.utility.makePostRequest("/api/user/create", [], user);
     };
     AuthManager = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, utility_1.Utility])
     ], AuthManager);
     return AuthManager;
 })();

@@ -1,15 +1,18 @@
 import {Injectable, Inject} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {IUser} from "./interfaces";
+import {Utility} from "./utility";
 
 @Injectable()
 
 export class AuthManager {
 
     http: Http;
+    utility: Utility;
 
-    constructor(http: Http) {
+    constructor(http: Http, utility: Utility) {
         this.http = http;
+        this.utility = utility;
     }
 
     isAuthenticated() {
@@ -38,16 +41,15 @@ export class AuthManager {
 
     login(email: string, password: string) {
         return new Promise((resolve, reject) => {
-            this.http.get("/api/user/login/" + email + "/" + password)
-            .subscribe((success) => {
-                if(success.json()) {
-                    localStorage.setItem("user", JSON.stringify(success.json()));
-                    resolve(success.json());
+            this.utility.makeGetRequest("/api/user/login", [email, password]).then((result) => {
+                if(result) {
+                    localStorage.setItem("user", JSON.stringify(result));
+                    resolve(result);
                 } else {
                     reject("User not found");
                 }
             }, (error) => {
-                reject(error.json());
+                reject(error);
             });
         });
     }
@@ -57,21 +59,7 @@ export class AuthManager {
     }
 
     register(user: IUser) {
-        return new Promise((resolve, reject) => {
-            var requestHeaders = new Headers();
-            requestHeaders.append("Content-Type", "application/json");
-            this.http.request(new Request({
-                method: RequestMethod.Post,
-                url: "/api/user/create",
-                body: JSON.stringify(user),
-                headers: requestHeaders
-            }))
-            .subscribe((success) => {
-                resolve(success.json());
-            }, (error) => {
-                reject(error.json());
-            });
-        })
+        return this.utility.makePostRequest("/api/user/create", [], user);
     }
 
 }

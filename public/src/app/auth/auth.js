@@ -12,26 +12,25 @@ var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
 var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
+var utility_1 = require("../utility");
 var AuthPage = (function () {
-    function AuthPage(http, router, authManager) {
+    function AuthPage(http, router, authManager, utility) {
         var _this = this;
         this.router = router;
         this.authManager = authManager;
         this.http = http;
+        this.utility = utility;
         this.companies = [];
-        this.http.get("/api/company/getAll")
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                _this.companies.push({
-                    id: jsonResponse[i]._id,
-                    name: jsonResponse[i].name
-                });
-            }
+        this.userCompany = "";
+        this.utility.makeGetRequest("/api/company/getAll", []).then(function (result) {
+            _this.companies = result;
         }, function (error) {
-            console.error(error.json());
+            console.error(error);
         });
     }
+    AuthPage.prototype.changeCompany = function (companyId) {
+        console.log(companyId);
+    };
     AuthPage.prototype.login = function (email, password) {
         var _this = this;
         if (!email || email == "") {
@@ -81,12 +80,12 @@ var AuthPage = (function () {
     AuthPage = __decorate([
         core_1.Component({
             selector: "auth",
-            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, utility_1.Utility]
         }),
         core_1.View({
             templateUrl: "app/auth/auth.html"
         }), 
-        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager, utility_1.Utility])
     ], AuthPage);
     return AuthPage;
 })();

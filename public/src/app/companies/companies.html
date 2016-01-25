@@ -14,8 +14,8 @@
         <tbody>
             <tr *ngFor="#company of companies">
                 <td><a href="{{company.id}}">{{company.name}}</a></td>
-                <td>{{company.city}}</td>
-                <td>{{company.state}}</td>
+                <td>{{company.address.city}}</td>
+                <td>{{company.address.state}}</td>
                 <td>{{company.website}}</td>
             </tr>
         </tbody>

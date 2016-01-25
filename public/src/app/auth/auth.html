@@ -94,9 +94,9 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Company</label>
                         <div class="col-sm-10">
-                            <select class="form-control" [(ngModel)]="company">
+                            <select class="form-control" [(ngModel)]="userCompany">
                                 <option value="" disabled selected>Select...</option>
-                                <option *ngFor="#company of companies" value="{{company.id}}">{{company.name}}</option>
+                                <option *ngFor="#company of companies" value="{{company._id}}">{{company.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" *ngIf="company" (click)="register(firstname, lastname, street, city, state, zip, country, phone, email, password, company)">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="register(firstname, lastname, street, city, state, zip, country, phone, email, password, userCompany)">Save</button>
             </div>
         </div>
     </div>

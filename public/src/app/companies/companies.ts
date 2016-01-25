@@ -3,10 +3,11 @@ import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/ht
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
 import {ICompany} from "../interfaces";
+import {Utility} from "../utility";
 
 @Component({
     selector: "companies",
-    viewProviders: [HTTP_PROVIDERS, AuthManager]
+    viewProviders: [HTTP_PROVIDERS, AuthManager, Utility]
 })
 
 @View({
@@ -16,35 +17,25 @@ import {ICompany} from "../interfaces";
 export class CompaniesPage {
 
     http: Http;
-    companies: Array<Object>;
+    companies: Array<ICompany>;
+    utility: Utility;
 
-    constructor(http: Http, router: Router, authManager: AuthManager) {
+    constructor(http: Http, router: Router, authManager: AuthManager, utility: Utility) {
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
         this.http = http;
+        this.utility = utility;
         this.companies = [];
-        this.http.get("/api/company/getAll")
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.companies.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name,
-                        city: jsonResponse[i].address.city,
-                        state: jsonResponse[i].address.state,
-                        website: jsonResponse[i].website
-                    }
-                );
-            }
+        this.utility.makeGetRequest("/api/company/getAll", []).then((result) => {
+            this.companies = <Array<ICompany>> result;
         }, (error) => {
-            console.error(JSON.stringify(error));
+            console.error(error);
         });
     }
 
     create(name: string, street: string, city: string, state: string, zip: string, country: string, phone: string, website: string) {
-        var postBody: ICompany = {
+        /*var postBody: ICompany = {
             name: name,
             address: {
                 street: street,
@@ -69,6 +60,22 @@ export class CompaniesPage {
             this.companies.push(postBody);
         }, (error) => {
             console.error("ERROR -> " + JSON.stringify(error));
+        });*/
+        this.utility.makePostRequest("/api/company/create", [], {
+            name: name,
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                zip: zip
+            },
+            phone: phone,
+            website: website
+        }).then((result) => {
+            this.companies.push(<ICompany> result);
+        }, (error) => {
+            console.error(error);
         });
     }
 }

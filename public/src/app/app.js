@@ -13,10 +13,10 @@ var browser_1 = require("angular2/platform/browser");
 var router_1 = require("angular2/router");
 var http_1 = require("angular2/http");
 var authmanager_1 = require("./authmanager");
+var utility_1 = require("./utility");
 var companies_1 = require("./companies/companies");
 var projects_1 = require("./projects/projects");
 var task_1 = require("./task/task");
-var users_1 = require("./users/users");
 var tasks_1 = require("./tasks/tasks");
 var auth_1 = require("./auth/auth");
 var App = (function () {
@@ -42,7 +42,6 @@ var App = (function () {
             { path: "/companies", as: "Companies", component: companies_1.CompaniesPage },
             { path: "/", as: "Projects", component: projects_1.ProjectsPage },
             { path: "/task/:taskId", as: "Task", component: task_1.TaskPage },
-            { path: "/users", as: "Users", component: users_1.UsersPage },
             { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage },
             { path: "/auth", as: "Auth", component: auth_1.AuthPage }
         ]), 
@@ -50,4 +49,4 @@ var App = (function () {
     ], App);
     return App;
 })();
-browser_1.bootstrap(App, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, core_1.provide(router_1.LocationStrategy, { useClass: router_1.HashLocationStrategy })]);
+browser_1.bootstrap(App, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, utility_1.Utility, core_1.provide(router_1.LocationStrategy, { useClass: router_1.HashLocationStrategy })]);
