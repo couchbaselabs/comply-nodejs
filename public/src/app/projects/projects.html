@@ -11,7 +11,7 @@
         <div class="col-md-4" *ngFor="#task of assignedTasks">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong><a href="/#/task/{{task.id}}">{{task.name}}</a></strong>
+                    <strong><a href="/#/task/{{task._id}}">{{task.name}}</a></strong>
                 </div>
                 <div class="panel-body">
                     {{task.description.substring(0, 200)}} ...
@@ -24,7 +24,7 @@
         <div class="col-md-4" *ngFor="#project of projects">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong><a href="/#/tasks/{{project.id}}">{{project.name}}</a></strong>
+                    <strong><a href="/#/tasks/{{project._id}}">{{project.name}}</a></strong>
                 </div>
                 <div class="panel-body">
                     {{project.description.substring(0, 200)}} ...
@@ -37,7 +37,7 @@
         <div class="col-md-4" *ngFor="#project of otherProjects">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong><a href="/#/tasks/{{project.id}}">{{project.name}}</a></strong>
+                    <strong><a href="/#/tasks/{{project._id}}">{{project.name}}</a></strong>
                 </div>
                 <div class="panel-body">
                     {{project.description.substring(0, 200)}} ...

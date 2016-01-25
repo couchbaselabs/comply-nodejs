@@ -1,5 +1,5 @@
 export interface IUser {
-    id?: string,
+    _id?: string,
     name: {
         first: string,
         last: string
@@ -18,26 +18,26 @@ export interface IUser {
 }
 
 export interface ITask {
-    id?: string,
+    _id?: string,
     name: string,
     description: string,
-    owner: string,
+    owner: IUser,
     assignedTo: Object,
     users: Array<Object>,
     history: Array<Object>
 }
 
 export interface IProject {
-    id?: string,
+    _id?: string,
     name: string,
     description: string,
-    owner: Object,
+    owner: IUser,
     users: Array<Object>,
     tasks: Array<Object>
 }
 
 export interface ICompany {
-    id?: string,
+    _id?: string,
     name: string,
     address: {
         street: string,

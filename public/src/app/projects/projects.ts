@@ -2,11 +2,12 @@ import {Component, View} from "angular2/core";
 import {Http, Request, RequestMethod, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Router} from "angular2/router";
 import {AuthManager} from "../authmanager";
-import {IProject} from "../interfaces";
+import {IProject, ITask, IUser} from "../interfaces";
+import {Utility} from "../utility";
 
 @Component({
     selector: "projects",
-    viewProviders: [HTTP_PROVIDERS, AuthManager]
+    viewProviders: [HTTP_PROVIDERS, AuthManager, Utility]
 })
 
 @View({
@@ -17,125 +18,69 @@ export class ProjectsPage {
 
     http: Http;
     projects: Array<Object>;
-    otherProjects: Array<Object>;
-    assignedTasks: Array<Object>;
-    owners: Array<Object>;
+    otherProjects: Array<IProject>;
+    assignedTasks: Array<ITask>;
     authManager: AuthManager;
+    utility: Utility;
 
-    constructor(http: Http, router: Router, authManager: AuthManager) {
+    constructor(http: Http, router: Router, authManager: AuthManager, utility: Utility) {
         this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
         this.http = http;
-        this.getUsers();
+        this.utility = utility;
         this.getProjects();
         this.getOtherProjects();
         this.getAssignedTasks();
     }
 
-    getUsers() {
-        this.owners = [];
-        this.http.get("/api/user/getAll")
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.owners.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        firstname: jsonResponse[i].name.first,
-                        lastname: jsonResponse[i].name.last
-                    }
-                );
-            }
-        }, (error) => {
-            console.error(JSON.stringify(error));
-        });
-    }
-
     getProjects() {
-        this.projects = [];
-        this.http.get("/api/project/getAll/" + this.authManager.getAuthToken())
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                this.projects.push(
-                    {
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name,
-                        description: jsonResponse[i].description
-                    }
-                );
-            }
+        this.utility.makeGetRequest("/api/project/getAll", [this.authManager.getAuthToken()]).then((result) => {
+            this.projects = <Array<IProject>> result;
         }, (error) => {
-            console.error(error.json());
+            console.error(error);
         });
     }
 
     getOtherProjects() {
         this.otherProjects = [];
-        this.http.get("/api/project/getOther/" + this.authManager.getAuthToken())
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                if(jsonResponse[i].owner._id != this.authManager.getAuthToken()) {
-                    this.otherProjects.push(
-                        {
-                            id: jsonResponse[i]._id,
-                            name: jsonResponse[i].name,
-                            description: jsonResponse[i].description,
-                            owner: jsonResponse[i].owner
-                        }
-                    );
+        this.utility.makeGetRequest("/api/project/getOther", [this.authManager.getAuthToken()]).then((result: Array<IProject>) => {
+            this.otherProjects = [];
+            for(var i = 0; i < result.length; i++) {
+                if(result[i].owner._id != this.authManager.getAuthToken()) {
+                    this.otherProjects.push(result[i]);
                 }
             }
         }, (error) => {
-            console.error(error.json());
+            console.error(error);
         });
     }
 
     getAssignedTasks() {
-        this.assignedTasks = [];
-        this.http.get("/api/task/getAssignedTo/" + this.authManager.getAuthToken())
-        .subscribe((success) => {
-            var jsonResponse = success.json();
-            for(var i = 0; i < jsonResponse.length; i++) {
-                if(jsonResponse[i].owner._id != this.authManager.getAuthToken()) {
-                    this.assignedTasks.push(
-                        {
-                            id: jsonResponse[i]._id,
-                            name: jsonResponse[i].name,
-                            description: jsonResponse[i].description
-                        }
-                    );
+        this.utility.makeGetRequest("/api/task/getAssignedTo", [this.authManager.getAuthToken()]).then((result: Array<ITask>) => {
+            this.assignedTasks = [];
+            for(var i = 0; i < result.length; i++) {
+                if(result[i].owner._id != this.authManager.getAuthToken()) {
+                    this.assignedTasks.push(result[i]);
                 }
             }
         }, (error) => {
-            console.error(error.json());
+            console.error(error);
         });
     }
 
     create(name: string, description: string) {
-        var postBody: IProject = {
+        this.utility.makePostRequest("/api/project/create", [], {
             name: name,
             description: description,
             owner: this.authManager.getAuthToken(),
             users: [],
             tasks: []
-        }
-        var requestHeaders = new Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new Request({
-            method: RequestMethod.Post,
-            url: "/api/project/create",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-        .subscribe((success) => {
-            postBody.id = success.json()._id;
-            this.projects.push(postBody);
+        }).then((result) => {
+            this.projects.push(result);
         }, (error) => {
-            console.error("ERROR -> " + JSON.stringify(error));
+            console.error(error);
         });
     }
 

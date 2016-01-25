@@ -36,8 +36,8 @@ export class TaskPage {
         this.utility = utility;
         this.users = [];
         this.taskId = routeParams.get("taskId");
-        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
-        this.task = { id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
+        this.project = { name: "", description: "", owner: <IUser> {}, users: [], tasks: [] };
+        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
         this.getTask(this.taskId);
         this.getUsers();
     }

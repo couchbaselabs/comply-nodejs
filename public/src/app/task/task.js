@@ -24,7 +24,7 @@ var TaskPage = (function () {
         this.users = [];
         this.taskId = routeParams.get("taskId");
         this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
-        this.task = { id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
+        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
         this.getTask(this.taskId);
         this.getUsers();
     }

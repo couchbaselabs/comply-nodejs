@@ -12,124 +12,77 @@ var core_1 = require("angular2/core");
 var http_1 = require("angular2/http");
 var router_1 = require("angular2/router");
 var authmanager_1 = require("../authmanager");
+var utility_1 = require("../utility");
 var ProjectsPage = (function () {
-    function ProjectsPage(http, router, authManager) {
+    function ProjectsPage(http, router, authManager, utility) {
         this.authManager = authManager;
         if (!authManager.isAuthenticated()) {
             router.navigate(["Auth"]);
         }
         this.http = http;
-        this.getUsers();
+        this.utility = utility;
         this.getProjects();
         this.getOtherProjects();
         this.getAssignedTasks();
     }
-    ProjectsPage.prototype.getUsers = function () {
-        var _this = this;
-        this.owners = [];
-        this.http.get("/api/user/getAll")
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                _this.owners.push({
-                    id: jsonResponse[i]._id,
-                    firstname: jsonResponse[i].name.first,
-                    lastname: jsonResponse[i].name.last
-                });
-            }
-        }, function (error) {
-            console.error(JSON.stringify(error));
-        });
-    };
     ProjectsPage.prototype.getProjects = function () {
         var _this = this;
-        this.projects = [];
-        this.http.get("/api/project/getAll/" + this.authManager.getAuthToken())
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                _this.projects.push({
-                    id: jsonResponse[i]._id,
-                    name: jsonResponse[i].name,
-                    description: jsonResponse[i].description
-                });
-            }
+        this.utility.makeGetRequest("/api/project/getAll", [this.authManager.getAuthToken()]).then(function (result) {
+            _this.projects = result;
         }, function (error) {
-            console.error(error.json());
+            console.error(error);
         });
     };
     ProjectsPage.prototype.getOtherProjects = function () {
         var _this = this;
         this.otherProjects = [];
-        this.http.get("/api/project/getOther/" + this.authManager.getAuthToken())
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                if (jsonResponse[i].owner._id != _this.authManager.getAuthToken()) {
-                    _this.otherProjects.push({
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name,
-                        description: jsonResponse[i].description,
-                        owner: jsonResponse[i].owner
-                    });
+        this.utility.makeGetRequest("/api/project/getOther", [this.authManager.getAuthToken()]).then(function (result) {
+            _this.otherProjects = [];
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].owner._id != _this.authManager.getAuthToken()) {
+                    _this.otherProjects.push(result[i]);
                 }
             }
         }, function (error) {
-            console.error(error.json());
+            console.error(error);
         });
     };
     ProjectsPage.prototype.getAssignedTasks = function () {
         var _this = this;
-        this.assignedTasks = [];
-        this.http.get("/api/task/getAssignedTo/" + this.authManager.getAuthToken())
-            .subscribe(function (success) {
-            var jsonResponse = success.json();
-            for (var i = 0; i < jsonResponse.length; i++) {
-                if (jsonResponse[i].owner._id != _this.authManager.getAuthToken()) {
-                    _this.assignedTasks.push({
-                        id: jsonResponse[i]._id,
-                        name: jsonResponse[i].name,
-                        description: jsonResponse[i].description
-                    });
+        this.utility.makeGetRequest("/api/task/getAssignedTo", [this.authManager.getAuthToken()]).then(function (result) {
+            _this.assignedTasks = [];
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].owner._id != _this.authManager.getAuthToken()) {
+                    _this.assignedTasks.push(result[i]);
                 }
             }
         }, function (error) {
-            console.error(error.json());
+            console.error(error);
         });
     };
     ProjectsPage.prototype.create = function (name, description) {
         var _this = this;
-        var postBody = {
+        this.utility.makePostRequest("/api/project/create", [], {
             name: name,
             description: description,
             owner: this.authManager.getAuthToken(),
             users: [],
             tasks: []
-        };
-        var requestHeaders = new http_1.Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new http_1.Request({
-            method: http_1.RequestMethod.Post,
-            url: "/api/project/create",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-            .subscribe(function (success) {
-            postBody.id = success.json()._id;
-            _this.projects.push(postBody);
+        }).then(function (result) {
+            _this.projects.push(result);
         }, function (error) {
-            console.error("ERROR -> " + JSON.stringify(error));
+            console.error(error);
         });
     };
     ProjectsPage = __decorate([
         core_1.Component({
             selector: "projects",
-            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager]
+            viewProviders: [http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, utility_1.Utility]
         }),
         core_1.View({
             templateUrl: "app/projects/projects.html"
         }), 
-        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router, authmanager_1.AuthManager, utility_1.Utility])
     ], ProjectsPage);
     return ProjectsPage;
 })();

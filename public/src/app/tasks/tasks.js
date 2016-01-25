@@ -22,7 +22,7 @@ var TasksPage = (function () {
         this.http = http;
         this.utility = utility;
         this.projectId = routeParams.get("projectId");
-        this.project = { id: "", name: "", description: "", owner: {}, users: [], tasks: null };
+        this.project = { _id: "", name: "", description: "", owner: {}, users: [], tasks: null };
         this.getProject(this.projectId);
         this.getUsers();
     }
@@ -60,7 +60,7 @@ var TasksPage = (function () {
     TasksPage.prototype.addUser = function (projectUser) {
         var _this = this;
         if (projectUser && projectUser != "") {
-            this.utility.makePostRequest("/api/project/addUser", [], { email: projectUser, projectId: this.project.id }).then(function (result) {
+            this.utility.makePostRequest("/api/project/addUser", [], { email: projectUser, projectId: this.project._id }).then(function (result) {
                 _this.project.users.unshift(result);
             }, function (error) {
                 console.error(error);
