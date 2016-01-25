@@ -35,32 +35,6 @@ export class CompaniesPage {
     }
 
     create(name: string, street: string, city: string, state: string, zip: string, country: string, phone: string, website: string) {
-        /*var postBody: ICompany = {
-            name: name,
-            address: {
-                street: street,
-                city: city,
-                state: state,
-                country: country,
-                zip: zip
-            },
-            phone: phone,
-            website: website
-        }
-        var requestHeaders = new Headers();
-        requestHeaders.append("Content-Type", "application/json");
-        this.http.request(new Request({
-            method: RequestMethod.Post,
-            url: "/api/company/create",
-            body: JSON.stringify(postBody),
-            headers: requestHeaders
-        }))
-        .subscribe((success) => {
-            postBody.id = success.json()._id;
-            this.companies.push(postBody);
-        }, (error) => {
-            console.error("ERROR -> " + JSON.stringify(error));
-        });*/
         this.utility.makePostRequest("/api/company/create", [], {
             name: name,
             address: {
