@@ -2,7 +2,13 @@
     <h1 class="page-header"><a href="/#/tasks/{{project._id}}">{{project.name}}</a> / <small>{{task.name}}</small></h1>
     <div class="well">
         <p>
-            {{task.description}}
+            <strong>Task Description:</strong>{{task.description}}
+        </p>
+        <p>
+          <strong>Task Created:</strong>{{task.createdON}}
+        </p>
+        <p>
+          <a href="/#/t/{{task.permalink}}">permalink</a>
         </p>
     </div>
     <div class="row">

@@ -19,6 +19,8 @@ var projects_1 = require("./projects/projects");
 var task_1 = require("./task/task");
 var tasks_1 = require("./tasks/tasks");
 var auth_1 = require("./auth/auth");
+var tasksRO_1 = require("./tasks/tasksRO");
+var taskRO_1 = require("./task/taskRO");
 var App = (function () {
     function App(router, location, authManager) {
         this.router = router;
@@ -43,10 +45,12 @@ var App = (function () {
             { path: "/", as: "Projects", component: projects_1.ProjectsPage },
             { path: "/task/:taskId", as: "Task", component: task_1.TaskPage },
             { path: "/tasks/:projectId", as: "Tasks", component: tasks_1.TasksPage },
-            { path: "/auth", as: "Auth", component: auth_1.AuthPage }
+            { path: "/auth", as: "Auth", component: auth_1.AuthPage },
+            { path: "/p/:url", as: "TasksRO", component: tasksRO_1.TasksROPage },
+            { path: "/t/:url", as: "TaskRO", component: taskRO_1.TaskROPage }
         ]), 
         __metadata('design:paramtypes', [router_1.Router, router_1.Location, authmanager_1.AuthManager])
     ], App);
     return App;
-})();
+}());
 browser_1.bootstrap(App, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, authmanager_1.AuthManager, utility_1.Utility, core_1.provide(router_1.LocationStrategy, { useClass: router_1.HashLocationStrategy })]);

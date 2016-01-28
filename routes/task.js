@@ -4,6 +4,27 @@ var UserModel = require("../models/user");
 
 var appRouter = function(app) {
 
+    app.get("/api/task/link/:url",function(req,res){
+        if(!req.params.url) {
+            return res.status(400).send({"status": "error", "message": "invalid link"});
+        }
+        TaskModel.findByLink(req.params.url, {load: ["users", "assignedTo", "history[*].user"]}, function(error, task) {
+            if(error) {
+                return res.status(400).send(error);
+            }
+            ProjectModel.find({tasks: {$contains: task[0]}}, function(error, projects) {
+                if(error) {
+                    return res.status(400).send(error);
+                }
+                if(projects.length > 0) {
+                    res.send({projectId: projects[0]._id, task: task[0]});
+                } else {
+                    res.status(400).send({"status": "error", "message": "Project not found"});
+                }
+            });
+        });
+      });
+
     app.get("/api/task/get/:taskId", function(req, res) {
         if(!req.params.taskId) {
             return res.status(400).send({"status": "error", "message": "A task id is required"});

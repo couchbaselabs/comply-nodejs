@@ -32,7 +32,7 @@ export class TasksPage {
         this.http = http;
         this.utility = utility;
         this.projectId = routeParams.get("projectId");
-        this.project = { _id: "", name: "", description: "", owner: <IUser> {}, users: [], tasks: null };
+        this.project = { _id: "", name: "", description: "", owner: <IUser> {}, users: [], tasks: null, permalink:"" };
         this.getProject(this.projectId);
         this.getUsers();
     }
@@ -48,6 +48,7 @@ export class TasksPage {
     getProject(projectId: string) {
         this.utility.makeGetRequest("/api/project/get", [projectId]).then((result) => {
             this.project = <IProject> result;
+            console.log("This project:",this.project);
         }, (error) => {
             console.log(error);
         });

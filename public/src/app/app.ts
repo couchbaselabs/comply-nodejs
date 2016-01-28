@@ -29,6 +29,8 @@ import { ProjectsPage } from "./projects/projects";
 import { TaskPage } from "./task/task";
 import { TasksPage } from "./tasks/tasks";
 import { AuthPage } from "./auth/auth";
+import { TasksROPage } from "./tasks/tasksRO";
+import { TaskROPage } from "./task/taskRO";
 
 @Component({
     selector: "my-app",
@@ -41,7 +43,9 @@ import { AuthPage } from "./auth/auth";
     { path: "/", as: "Projects", component: ProjectsPage },
     { path: "/task/:taskId", as: "Task", component: TaskPage },
     { path: "/tasks/:projectId", as: "Tasks", component: TasksPage },
-    { path: "/auth", as: "Auth", component: AuthPage }
+    { path: "/auth", as: "Auth", component: AuthPage },
+    { path: "/p/:url", as: "TasksRO", component:TasksROPage},
+    { path: "/t/:url", as: "TaskRO", component:TaskROPage}
 ])
 
 class App {

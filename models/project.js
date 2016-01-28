@@ -10,7 +10,8 @@ var ProjectMdl = ottoman.model("Project", {
         owner: { ref: "User" },
         users: [{ ref: "User" }],
         tasks: [{ ref: "Task" }],
-        status: "string"
+        status: "string",
+        permalink:{type:"string", default: validator.permalinker}
 }, {
     index: {
         findByName: {
@@ -24,6 +25,10 @@ var ProjectMdl = ottoman.model("Project", {
         findByOwner:{
             by:"owner",
             type: "n1ql"
+        },
+        findByLink:{
+            by:"permalink",
+            type: "refdoc"
         }
     }
 });

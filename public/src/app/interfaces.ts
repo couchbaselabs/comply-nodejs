@@ -24,13 +24,15 @@ export interface ITask {
     owner: IUser,
     assignedTo: Object,
     users: Array<Object>,
-    history: Array<Object>
+    history: Array<Object>,
+    permalink: string
 }
 
 export interface IProject {
     _id?: string,
     name: string,
     description: string,
+    permalink:string,
     owner: IUser,
     users: Array<Object>,
     tasks: Array<Object>

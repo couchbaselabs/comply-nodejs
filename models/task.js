@@ -14,6 +14,7 @@ var TaskMdl = ottoman.model("Task", {
     users: [{ref: "User"}],
     priority: "string",
     status: "string",
+    permalink: {type:"string", default: validator.permalinker},
     history: [
         {
             log: "string",
@@ -49,6 +50,10 @@ var TaskMdl = ottoman.model("Task", {
         findByOwner:{
             by:"owner",
             type: "n1ql"
+        },
+        findByLink:{
+            by:"permalink",
+            type: "refdoc"
         }
     }
 });

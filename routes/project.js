@@ -3,6 +3,18 @@ var UserModel = require("../models/user");
 
 var appRouter = function(app) {
 
+    app.get("/api/project/link/:url",function(req,res){
+        if(!req.params.url) {
+            return res.status(400).send({"status": "error", "message": "invalid link"});
+        }
+        ProjectModel.findByLink(req.params.url,function(error,project){
+            if(error) {
+                return res.status(400).send(error);
+            }
+            res.send(project[0]);
+        });
+    });
+
     app.get("/api/project/get/:projectId", function(req, res) {
         if(!req.params.projectId) {
             return res.status(400).send({"status": "error", "message": "A project id is required"});

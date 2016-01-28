@@ -1,6 +1,8 @@
 {
     "couchbase": {
-        "server": "127.0.0.1:8091",
+        "server": "192.168.99.100:8091",
         "bucket": "comply"
-    }
+
+    },
+    "salt":"testApp"
 }

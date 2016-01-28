@@ -23,8 +23,8 @@ var TaskPage = (function () {
         this.utility = utility;
         this.users = [];
         this.taskId = routeParams.get("taskId");
-        this.project = { name: "", description: "", owner: {}, users: [], tasks: [] };
-        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [] };
+        this.project = { name: "", description: "", owner: {}, users: [], tasks: [], permalink: "" };
+        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: { name: {} }, users: [], history: [], permalink: "" };
         this.getTask(this.taskId);
         this.getUsers();
     }
@@ -32,6 +32,7 @@ var TaskPage = (function () {
         var _this = this;
         this.utility.makeGetRequest("/api/task/get", [taskId]).then(function (result) {
             _this.task = result.task;
+            console.log("this.history:", result.task.history);
             _this.getProject(result.projectId);
         }, function (error) {
             console.error(error);
@@ -111,5 +112,5 @@ var TaskPage = (function () {
         __metadata('design:paramtypes', [router_1.RouteParams, http_1.Http, router_1.Router, authmanager_1.AuthManager, utility_1.Utility])
     ], TaskPage);
     return TaskPage;
-})();
+}());
 exports.TaskPage = TaskPage;

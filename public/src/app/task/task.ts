@@ -36,8 +36,8 @@ export class TaskPage {
         this.utility = utility;
         this.users = [];
         this.taskId = routeParams.get("taskId");
-        this.project = { name: "", description: "", owner: <IUser> {}, users: [], tasks: [] };
-        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [] };
+        this.project = { name: "", description: "", owner: <IUser> {}, users: [], tasks: [], permalink:"" };
+        this.task = { _id: "", name: "", description: "", owner: null, assignedTo: {name: {}}, users: [], history: [], permalink :""};
         this.getTask(this.taskId);
         this.getUsers();
     }
@@ -45,6 +45,7 @@ export class TaskPage {
     getTask(taskId) {
         this.utility.makeGetRequest("/api/task/get", [taskId]).then((result: any) => {
             this.task = <ITask> result.task;
+            console.log("this.history:",result.task.history);
             this.getProject(result.projectId);
         }, (error) => {
             console.error(error);
