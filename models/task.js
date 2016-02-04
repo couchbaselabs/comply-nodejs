@@ -18,7 +18,7 @@ var TaskMdl = ottoman.model("Task", {
     history: [
         {
             log: "string",
-            photos: [{type: "string"}],
+            photos: [{filename: "string",extension:"string"}],
             url: "string",
             user: {ref: "User"},
             createdAt: { type: "Date", default: function() { return new Date() }}

@@ -37,6 +37,28 @@ var Utility = (function () {
             });
         });
     };
+    Utility.prototype.makeFileRequest = function (url, params, file, description, userId, taskId) {
+        return new Promise(function (resolve, reject) {
+            var formData = new FormData();
+            formData.append('upl', file, file.name);
+            formData.append('description', description);
+            formData.append('userId', userId);
+            formData.append('taskId', taskId);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.response)); // NOT Json by default, it must be parsed.
+                    }
+                    else {
+                        reject(xhr.response);
+                    }
+                }
+            };
+            xhr.open('POST', '/api/cdn/add', true);
+            xhr.send(formData);
+        });
+    };
     Utility.prototype.makeGetRequest = function (url, params) {
         var _this = this;
         var fullUrl = url;

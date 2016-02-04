@@ -152,7 +152,31 @@ var appRouter = function(app) {
                         return res.status(400).send(error);
                     }
                     res.send({log: req.body.log, user: user, createdAt: history.createdAt});
-                })
+                });
+            });
+        });
+    });
+
+    app.post("/api/task/addPhoto", function(req,res){
+        TaskModel.getById(req.body.taskId,function(error,task){
+            if(error){
+                return res.status(400).send(error);
+            }
+            var history = {
+                user: UserModel.ref(req.body.userId),
+                createdAt: (new Date()),
+                photos:[req.body.imageId]
+            }
+            task.save(function(error) {
+                if (error) {
+                    return res.status(400).send(error);
+                }
+                UserModel.getById(req.body.userId, function(error, user) {
+                    if(error) {
+                        return res.status(400).send(error);
+                    }
+                    res.send({log: req.body.log, user: user, createdAt: history.createdAt, photos:[req.body.imageId]});
+                });
             });
         });
     });

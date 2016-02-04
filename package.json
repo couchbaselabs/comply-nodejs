@@ -18,6 +18,7 @@
     "systemjs": "^0.19.14",
     "typescript": "^1.7.5",
     "zone.js": "^0.5.10",
-    "hashids": "*"
+    "hashids": "*",
+    "multer":"*"
   }
 }

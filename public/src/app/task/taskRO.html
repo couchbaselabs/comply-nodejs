@@ -24,6 +24,9 @@
                     <div class="well" *ngFor="#item of task.history">
                         <p class="small"><strong>{{item.user.name.first}} {{item.user.name.last}} - {{parseDate(item.createdAt)}}</strong></p>
                         <p>{{item.log}}</p>
+                        <div *ngIf="item.photos">
+                            <a href="/cdn/{{item.photos[0].filename}}"><img height="75" width="75" alt="click for full size" src="/cdn/{{item.photos[0].filename}}"></a>
+                        </div>
                     </div>
                 </div>
             </div>

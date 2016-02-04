@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Global declaration of the Couchbase server and bucket to be used
 module.exports.bucket = (new couchbase.Cluster(config.couchbase.server)).openBucket(config.couchbase.bucket);
-
+app.use("/cdn",express.static(path.join(__dirname, "cdn")));
 app.use(express.static(path.join(__dirname, "public/src")));
 app.use("/node_modules", express.static(__dirname + "/node_modules/"));
 
@@ -26,6 +26,8 @@ var company = require("./routes/company.js")(app);
 var user = require("./routes/user.js")(app);
 var project = require("./routes/project.js")(app);
 var task = require("./routes/task.js")(app);
+var cdn = require("./routes/cdn.js")(app);
+
 
 ottoman.bucket = module.exports.bucket;
 

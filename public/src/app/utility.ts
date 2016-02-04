@@ -33,6 +33,32 @@ export class Utility {
         });
     }
 
+    makeFileRequest(url: string, params: Array<string>, file:File, description:string, userId: string, taskId:string) {
+
+        return new Promise((resolve, reject)=> {
+            var formData:any = new FormData();
+
+            formData.append('upl', file, file.name);
+            formData.append('description', description);
+            formData.append('userId', userId);
+            formData.append('taskId', taskId);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.response)); // NOT Json by default, it must be parsed.
+                    } else {
+                        reject(xhr.response);
+                    }
+                }
+            }
+            xhr.open('POST', '/api/cdn/add', true);
+            xhr.send(formData);
+        });
+    }
+
     makeGetRequest(url: string, params: Array<string>) {
         var fullUrl: string = url;
         if(params && params.length > 0) {
