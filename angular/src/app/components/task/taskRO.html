@@ -1,0 +1,35 @@
+<div class="main">
+    <h1 class="page-header"><a [routerLink]="['/tasks', project._id]">{{project.name}}</a> / <small>{{task.name}}</small></h1>
+    <div class="well">
+        <p>
+            <strong>Task Description:</strong>{{task.description}}
+        </p>
+        <p>
+          <strong>Task Created:</strong>{{task.createdON}}
+        </p>
+        <p>
+          <a [routerLink]="['/t', task.permalink]">permalink</a>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Task History</strong>
+                    <div class="pull-right">
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="well" *ngFor="let item of task.history">
+                        <p class="small"><strong>{{item.user.name.first}} {{item.user.name.last}} - {{parseDate(item.createdAt)}}</strong></p>
+                        <p>{{item.log}}</p>
+                        <div *ngIf="item.photos">
+                            <a href="/cdn/{{item.photos[0].filename}}"><img height="75" width="75" alt="click for full size" src="/cdn/{{item.photos[0].filename}}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

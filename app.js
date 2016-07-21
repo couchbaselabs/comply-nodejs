@@ -12,8 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Global declaration of the Couchbase server and bucket to be used
 module.exports.bucket = (new couchbase.Cluster(config.couchbase.server)).openBucket(config.couchbase.bucket);
 app.use("/cdn",express.static(path.join(__dirname, "cdn")));
-app.use(express.static(path.join(__dirname, "public/src")));
-app.use("/node_modules", express.static(__dirname + "/node_modules/"));
+app.use(express.static(path.join(__dirname, "public")));
+//app.use("/node_modules", express.static(__dirname + "/node_modules/"));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

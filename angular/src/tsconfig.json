@@ -1,0 +1,44 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "mapRoot": "/",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "outDir": "../dist/",
+    "rootDir": ".",
+    "sourceMap": true,
+    "target": "es5",
+    "inlineSources": true
+  },
+  "filesGlob": [
+    "./**/*.ts"
+  ],
+  "files": [
+    "./app/app.component.spec.ts",
+    "./app/app.component.ts",
+    "./app/authmanager.ts",
+    "./app/components/auth/auth.ts",
+    "./app/components/companies/companies.ts",
+    "./app/components/projects/projects.ts",
+    "./app/components/task/task.ts",
+    "./app/components/task/taskRO.ts",
+    "./app/components/tasks/tasks.ts",
+    "./app/components/tasks/tasksRO.ts",
+    "./app/environment.ts",
+    "./app/index.ts",
+    "./app/interfaces.ts",
+    "./app/shared/index.ts",
+    "./app/utility.ts",
+    "./main.ts",
+    "./system-config.ts",
+    "./typings.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
+}

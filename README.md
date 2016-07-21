@@ -8,15 +8,18 @@ Download or clone the project from GitHub and run the following via the Command 
 
 ```
 npm install
+cd angular
+npm install
 ```
 
 This will install all Node.js and Angular 2 dependencies into the project.  With the dependencies available, the TypeScript files need to be compiled into their JavaScript version.  This can be done by executing the following from the Terminal or Command Prompt:
 
 ```
-tsc -p public/src
+cd angular
+ng build -prod --output-path=../public
 ```
 
-If there were no compile time errors, you should be left with a JavaScript file for every TypeScript file.
+If there were no compile time errors, you should be left with a **public** directory that will be picked up by Node.js when the project is run.
 
 ## Configuration
 
@@ -37,3 +40,5 @@ Because the Angular 2 TypeScript files were compiled in the installation step, a
 Couchbase Server - [http://www.couchbase.com](http://www.couchbase.com)
 
 Ottoman - [http://ottomanjs.com](http://ottomanjs.com)
+
+Couchbase Compliance Demo with Java - [https://github.com/couchbaselabs/comply-java](https://github.com/couchbaselabs/comply-java)

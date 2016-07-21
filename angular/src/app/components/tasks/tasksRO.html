@@ -1,0 +1,16 @@
+<div class="main">
+    <h1 class="page-header">{{project.name}}</h1>
+    <div class="well">
+      <p>
+        <strong>Project Description: </strong> {{project.description}}
+      </p>
+      <p>
+        <strong>Project Created ON: </strong> {{project.createdON}}
+      </p>
+      <p>
+        <strong>Project Status: </strong> {{project.status}}
+      </p>
+      <p>
+          <a [routerLink]="['/p', project.permalink]">permalink</a>
+      </p>
+    </div>

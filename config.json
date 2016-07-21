@@ -1,7 +1,7 @@
 {
     "couchbase": {
-        "server": "192.168.99.100:8091",
-        "bucket": "comply"
+        "server": "couchbase://localhost",
+        "bucket": "default"
 
     },
     "salt":"testApp"

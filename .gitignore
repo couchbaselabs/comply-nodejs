@@ -1,4 +1,8 @@
+angular/public
+angular/tmp
 node_modules
+public
+cdn
 
 .DS_Store*
 Thumbs.db
