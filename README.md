@@ -16,7 +16,7 @@ This will install all Node.js and Angular 2 dependencies into the project.  With
 
 ```
 cd angular
-ng build -prod --output-path=../public
+ng build --output-path=../public
 ```
 
 If there were no compile time errors, you should be left with a **public** directory that will be picked up by Node.js when the project is run.
@@ -42,3 +42,5 @@ Couchbase Server - [http://www.couchbase.com](http://www.couchbase.com)
 Ottoman - [http://ottomanjs.com](http://ottomanjs.com)
 
 Couchbase Compliance Demo with Java - [https://github.com/couchbaselabs/comply-java](https://github.com/couchbaselabs/comply-java)
+
+Couchbase Compliance Demo with GoLang - [https://github.com/couchbaselabs/comply-java](https://github.com/couchbaselabs/comply-golang)
