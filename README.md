@@ -43,4 +43,4 @@ Ottoman - [http://ottomanjs.com](http://ottomanjs.com)
 
 Couchbase Compliance Demo with Java - [https://github.com/couchbaselabs/comply-java](https://github.com/couchbaselabs/comply-java)
 
-Couchbase Compliance Demo with GoLang - [https://github.com/couchbaselabs/comply-java](https://github.com/couchbaselabs/comply-golang)
+Couchbase Compliance Demo with GoLang - [https://github.com/couchbaselabs/comply-golang](https://github.com/couchbaselabs/comply-golang)
