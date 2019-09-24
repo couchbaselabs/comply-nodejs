@@ -1,8 +1,6 @@
 var ottoman = require("ottoman");
 var validator = require("../validators/validators.js");
 
-ottoman.bucket = require("../app").bucket;
-
 var TaskMdl = ottoman.model("Task", {
     createdON: { type: "Date", default: function() {return new Date() }},
     url: "string",

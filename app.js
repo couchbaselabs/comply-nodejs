@@ -10,7 +10,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Global declaration of the Couchbase server and bucket to be used
-module.exports.bucket = (new couchbase.Cluster(config.couchbase.server)).openBucket(config.couchbase.bucket);
+var cluster = new couchbase.Cluster(config.couchbase.server);
+cluster.authenticate(config.couchbase.user, config.couchbase.pass);
+var bucket = cluster.openBucket(config.couchbase.bucket);
+module.exports.bucket = bucket;
+
+// Use store adapter directly so we can control the Couchnode version.
+ottoman.store = new ottoman.CbStoreAdapter(module.exports.bucket, couchbase);
+
+// Set up our routes
 app.use("/cdn",express.static(path.join(__dirname, "cdn")));
 app.use(express.static(path.join(__dirname, "public")));
 //app.use("/node_modules", express.static(__dirname + "/node_modules/"));
@@ -27,9 +35,6 @@ var user = require("./routes/user.js")(app);
 var project = require("./routes/project.js")(app);
 var task = require("./routes/task.js")(app);
 var cdn = require("./routes/cdn.js")(app);
-
-
-ottoman.bucket = module.exports.bucket;
 
 var UserModel = require("./models/user");
 var CompanyModel = require("./models/company");

@@ -1,8 +1,9 @@
 {
     "couchbase": {
         "server": "couchbase://localhost",
-        "bucket": "default"
-
+        "bucket": "default",
+        "user": "Administrator",
+        "pass": "password"
     },
     "salt":"testApp"
 }

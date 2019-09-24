@@ -1,8 +1,6 @@
 var ottoman = require("ottoman");
 var validator = require("../validators/validators.js");
 
-ottoman.bucket = require("../app").bucket;
-
 var CompanyMdl = ottoman.model("Company", {
     createdON: { type: "Date", default:new Date() },
     name: "string",
